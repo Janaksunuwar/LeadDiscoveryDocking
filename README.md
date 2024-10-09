@@ -9,7 +9,7 @@ Environment Setup with Conda:
 The pipeline uses a Conda environment to manage dependencies. The environment.yml file specifies all required tools and libraries, including AutoDock Vina, RDKit, GROMACS, and PyMOL.
 All software dependencies and Python libraries (like numpy, pandas, matplotlib, and scipy) are installed via Conda to maintain version consistency and reproducibility.
 
-# Core Components:
+## Core Components:
 
 AutoDock Vina: Performs high-throughput docking to identify initial binding poses for small molecule leads.
 
@@ -21,7 +21,7 @@ GNINA: Enhances scoring and docking accuracy with deep learning-based prediction
 
 PyMOL: Visualizes and customizes the binding poses and protein-ligand interactions, providing publication-quality images.
 
-# Repository Structure
+## Repository Structure
 
 Dockerfile: Defines the container environment, with all necessary tools and dependencies.
 
