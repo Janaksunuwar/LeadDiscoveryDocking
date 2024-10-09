@@ -1,4 +1,4 @@
-# LeadDiscoveryDocking in progress
+# LeadDiscoveryDocking in progress ..
 The LeadDiscoveryDocking pipeline is designed for high-throughput screening, scoring, and refinement of small molecule leads for protein-ligand docking. This pipeline is containerized using Docker to ensure reproducibility and compatibility across various systems, including macOS, Linux, and cloud environments.
 
 ## Pipeline Workflow Overview
@@ -22,7 +22,6 @@ GNINA: Enhances scoring and docking accuracy with deep learning-based prediction
 PyMOL: Visualizes and customizes the binding poses and protein-ligand interactions, providing publication-quality images.
 
 # Repository Structure
-The GitHub repository contains the following files:
 
 Dockerfile: Defines the container environment, with all necessary tools and dependencies.
 
@@ -30,7 +29,7 @@ environment.yml: Specifies package versions and tools for consistent Conda envir
 
 run_pipeline.sh: Runs the pipeline within the container.
 
-main.nf: Nextflow file for automating workflow steps, if desired.
+main.nf: Nextflow file for automating workflow steps.
 
-README.md: Provides an overview, installation instructions, and usage examples.
+README.md: an overview, installation instructions, and usage examples.
 
