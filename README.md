@@ -21,4 +21,16 @@ GNINA: Enhances scoring and docking accuracy with deep learning-based prediction
 
 PyMOL: Visualizes and customizes the binding poses and protein-ligand interactions, providing publication-quality images.
 
+#Repository Structure
+The GitHub repository contains the following files:
+
+Dockerfile: Defines the container environment, with all necessary tools and dependencies.
+
+environment.yml: Specifies package versions and tools for consistent Conda environment setup.
+
+run_pipeline.sh: Runs the pipeline within the container.
+
+main.nf: Nextflow file for automating workflow steps, if desired.
+
+README.md: Provides an overview, installation instructions, and usage examples.
 
