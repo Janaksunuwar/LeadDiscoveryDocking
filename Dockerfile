@@ -16,6 +16,7 @@ RUN apt-get update && apt-get install -y \
     libboost-all-dev \
     software-properties-common \
     ca-certificates \
+    openbable \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Miniconda
@@ -59,7 +60,7 @@ RUN git clone https://github.com/gnina/gnina.git && \
     make install
 
 # Placeholder for X-Score installation
-# X-Score does not have a direct Conda or APT package; you may need to manually download it
+# X-Score does not have a direct Conda or APT package; need to manually download it
 # RUN wget <link-to-XScore> && tar -xvf <downloaded-package>
 # Please follow X-Score documentation for manual installation
 
@@ -67,10 +68,20 @@ RUN git clone https://github.com/gnina/gnina.git && \
 #RUN apt-get update && apt-get install -y pymol
 #installed via conda
 
+# Install MGLTools for preparing PDBQT files
+RUN wget http://mgltools.scripps.edu/downloads/release/mgltools-1.5.6/MGLTools-1.5.6.tar.gz && \
+    tar -zxvf MGLTools-1.5.6.tar.gz && \
+    cd MGLTools-1.5.6 && \
+    ./install.sh -d /opt/mgltools && \
+    ln -s /opt/mgltools/bin/pythonsh /usr/local/bin/pythonsh && \
+    ln -s /opt/mgltools/bin/prepare_ligand4.py /usr/local/bin/prepare_ligand4.py && \
+    ln -s /opt/mgltools/bin/prepare_receptor4.py /usr/local/bin/prepare_receptor4.py
+
 # Set the working directory
 WORKDIR /workspace
 COPY run_pipeline.sh /workspace/
 COPY main.nf /workspace/
+COPY scripts/ /workspace/scripts/
 
 # Set entrypoint
 ENTRYPOINT ["bash", "/workspace/run_pipeline.sh"]

@@ -33,3 +33,4 @@ main.nf: Nextflow file for automating workflow steps.
 
 README.md: an overview, installation instructions, and usage examples.
 
+**..
