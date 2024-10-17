@@ -45,11 +45,12 @@ def download_pdbqt_files(uri_file, output_dir):
 
 def main():
     # Update paths to be relative to the user's home directory to avoid read-only file system issues
-    uri_file = os.path.expanduser("./data/zinc/ZINC-downloader-3D-pdbqt.gz.uri")
-    output_dir = os.path.expanduser("./data/zinc/zinc_downloaded_pdbqt")
+    uri_file = "data/zinc/ZINC-downloader-3D-pdbqt.gz.uri"
+    output_dir = "data/zinc/zinc_downloaded_pdbqt"
 
     # Download PDBQT files from the uri file
     download_pdbqt_files(uri_file, output_dir)
 
 if __name__ == "__main__":
     main()
+
