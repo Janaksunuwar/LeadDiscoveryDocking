@@ -25,7 +25,7 @@ RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -
     rm /tmp/miniconda.sh
 ENV PATH="/opt/conda/bin:$PATH"
 
-# Create Conda environment and install AutoDock Vina, RDKit, and GROMACS
+# Create Conda environment for Python-based dependencies
 COPY environment.yml /tmp/environment.yml
 RUN conda update -n base -c defaults conda && \
     conda env create -f /tmp/environment.yml && \
@@ -34,20 +34,22 @@ RUN conda update -n base -c defaults conda && \
 # Install Python libraries outside of Conda (for global use)
 RUN pip3 install numpy pandas matplotlib scipy
 
-# Activate the Conda environment and install AutoDock Vina
-RUN conda activate docking_env && \
-    conda install -c bioconda autodock-vina && \
-    conda clean -a
+# Install a specific version of AutoDock Vina
+#RUN wget https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.3/vina_1.2.3_linux_x86_64 -O /usr/local/bin/vina && \
+#    chmod +x /usr/local/bin/vina
 
-# Install RDKit via Conda
-RUN conda activate docking_env && \
-    conda install -c conda-forge rdkit && \
-    conda clean -a
+# Pull AutoDock Vina from Docker Hub
+FROM ccsb-scripps/autodock-vina:latest AS vina
 
-# Install GROMACS via Conda
-RUN conda activate docking_env && \
-    conda install -c bioconda gromacs && \
-    conda clean -a
+
+
+# Pull RDKit from Docker Hub
+FROM rdkit/rdkit:latest AS rdkit
+
+
+
+# Pull GROMACS from Docker Hub
+FROM biocontainers/gromacs:latest AS gromacs
 
 # Clone and install GNINA at version 1.3
 RUN git clone https://github.com/gnina/gnina.git && \
@@ -58,6 +60,9 @@ RUN git clone https://github.com/gnina/gnina.git && \
     cmake .. && \
     make && \
     make install
+
+# Pull PyMOL from Docker Hub
+FROM schrodinger/pymol:latest AS pymol
 
 # Placeholder for X-Score installation
 # X-Score does not have a direct Conda or APT package; need to manually download it
@@ -85,3 +90,4 @@ COPY scripts/ /workspace/scripts/
 
 # Set entrypoint
 ENTRYPOINT ["bash", "/workspace/run_pipeline.sh"]
+
