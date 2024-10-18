@@ -43,14 +43,38 @@ def download_pdbqt_files(uri_file, output_dir):
             except Exception as e:
                 print(f"Error unzipping {file_name}: {e}")
 
-def main():
-    # Update paths to be relative to the user's home directory to avoid read-only file system issues
-    uri_file = "data/zinc/ZINC-downloader-3D-pdbqt.gz.uri"
-    output_dir = "data/zinc/zinc_downloaded_pdbqt"
+def separate_molecules(input_dir):
+    # Iterate over each pdbqt file and separate molecules
+    for file_name in os.listdir(input_dir):
+        if file_name.endswith(".pdbqt"):
+            input_path = os.path.join(input_dir, file_name)
+            with open(input_path, 'r') as f:
+                content = f.read()
+
+            # Split molecules based on MODEL tag (AutoDock uses MODEL tag to separate)
+            molecules = content.split('MODEL')
+            for idx, molecule in enumerate(molecules[1:], start=1):
+                molecule = 'MODEL' + molecule  # Add back the MODEL tag
+                output_path = os.path.join(input_dir, f"{file_name[:-6]}_molecule_{idx}.pdbqt")
+                with open(output_path, 'w') as f_out:
+                    f_out.write(molecule)
+                print(f"Separated molecule {idx} from {file_name} into {output_path}")
+
+def main(uri_file, output_dir):
 
     # Download PDBQT files from the uri file
     download_pdbqt_files(uri_file, output_dir)
 
+    # Separate molecules from each downloaded PDBQT file
+    separate_molecules(output_dir)
+
 if __name__ == "__main__":
-    main()
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Download PDBQT files and separate molecules.")
+    parser.add_argument('--uri_file', type=str, required=True, help='Path to the URI file containing download links.')
+    parser.add_argument('--output_dir', type=str, required=True, help='Directory to store downloaded and separated PDBQT files.')
+    
+    args = parser.parse_args()
+    main(args.uri_file, args.output_dir)
 
