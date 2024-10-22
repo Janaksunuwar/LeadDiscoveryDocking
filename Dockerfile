@@ -37,8 +37,6 @@ RUN apt-get update && apt-get install -y apt-transport-https ca-certificates gnu
     apt-add-repository 'deb https://apt.kitware.com/ubuntu/ jammy main' && \
     apt-get update && apt-get install -y cmake
 
-
-
 # Install Miniconda
 RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh && \
     chmod +x /tmp/miniconda.sh && \
@@ -63,24 +61,18 @@ RUN pip3 install numpy pandas matplotlib scipy
 # Install AutoDock Vina via Conda
 RUN conda install -c bioconda autodock-vina
 
-
 # Install RDKit manually
 RUN apt-get update && apt-get install -y python3-rdkit
 
-
 # Install GROMACS manually
 RUN apt-get update && apt-get install -y gromacs
-
 
 # Download GNINA pre-built binary
 RUN wget https://github.com/gnina/gnina/releases/download/v1.3/gnina -O /usr/local/bin/gnina && \
     chmod +x /usr/local/bin/gnina
 
-
 # Install PyMOL manually in the Dockerfile
 RUN apt-get update && apt-get install -y pymol
-
-
 
 # Placeholder for X-Score installation
 # X-Score does not have a direct Conda or APT package; need to manually download it
@@ -100,14 +92,9 @@ RUN wget https://ccsb.scripps.edu/download/532/ -O MGLTools-1.5.7.tar.gz && \
     ln -s /opt/mgltools/bin/prepare_ligand4.py /usr/local/bin/prepare_ligand4.py && \
     ln -s /opt/mgltools/bin/prepare_receptor4.py /usr/local/bin/prepare_receptor4.py
 
-
-
-
-
 # Set the working directory
 WORKDIR /workspace
 COPY scripts/main.nf /workspace/
-
 
 # Set entrypoint
 ENTRYPOINT ["bash", "/workspace/run_pipeline.sh"]
