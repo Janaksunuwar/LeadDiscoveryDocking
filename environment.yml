@@ -9,4 +9,3 @@ dependencies:
   - pandas=1.1.5
   - matplotlib=3.3.2
   - scipy=1.5.2
-  - pymol-open-source=2.4.1
