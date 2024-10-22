@@ -1,5 +1,5 @@
 # Base image with Ubuntu
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 # Set non-interactive mode to avoid prompts
 ENV DEBIAN_FRONTEND=noninteractive
@@ -16,13 +16,35 @@ RUN apt-get update && apt-get install -y \
     libboost-all-dev \
     software-properties-common \
     ca-certificates \
-    openbable \
+    libeigen3-dev \
+    libgoogle-glog-dev \
+    libprotobuf-dev \
+    protobuf-compiler \
+    libhdf5-dev \
+    libatlas-base-dev \
+    python3-dev \
+    librdkit-dev \
+    python3-numpy \
+    python3-pip \
+    python3-pytest \
+    libjsoncpp-dev \
+    openbabel \
     && rm -rf /var/lib/apt/lists/*
+
+# Add Kitware Repo for cmake
+RUN apt-get update && apt-get install -y apt-transport-https ca-certificates gnupg && \
+    wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | apt-key add - && \
+    apt-add-repository 'deb https://apt.kitware.com/ubuntu/ jammy main' && \
+    apt-get update && apt-get install -y cmake
+
+
 
 # Install Miniconda
 RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh && \
+    chmod +x /tmp/miniconda.sh && \
     bash /tmp/miniconda.sh -b -p /opt/conda && \
     rm /tmp/miniconda.sh
+
 ENV PATH="/opt/conda/bin:$PATH"
 
 # Create Conda environment for Python-based dependencies
@@ -38,31 +60,27 @@ RUN pip3 install numpy pandas matplotlib scipy
 #RUN wget https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.3/vina_1.2.3_linux_x86_64 -O /usr/local/bin/vina && \
 #    chmod +x /usr/local/bin/vina
 
-# Pull AutoDock Vina from Docker Hub
-FROM ccsb-scripps/autodock-vina:latest AS vina
+# Install AutoDock Vina via Conda
+RUN conda install -c bioconda autodock-vina
 
 
-
-# Pull RDKit from Docker Hub
-FROM rdkit/rdkit:latest AS rdkit
-
+# Install RDKit manually
+RUN apt-get update && apt-get install -y python3-rdkit
 
 
-# Pull GROMACS from Docker Hub
-FROM biocontainers/gromacs:latest AS gromacs
+# Install GROMACS manually
+RUN apt-get update && apt-get install -y gromacs
 
-# Clone and install GNINA at version 1.3
-RUN git clone https://github.com/gnina/gnina.git && \
-    cd gnina && \
-    git checkout v1.3 && \
-    mkdir build && \
-    cd build && \
-    cmake .. && \
-    make && \
-    make install
 
-# Pull PyMOL from Docker Hub
-FROM schrodinger/pymol:latest AS pymol
+# Download GNINA pre-built binary
+RUN wget https://github.com/gnina/gnina/releases/download/v1.3/gnina -O /usr/local/bin/gnina && \
+    chmod +x /usr/local/bin/gnina
+
+
+# Install PyMOL manually in the Dockerfile
+RUN apt-get update && apt-get install -y pymol
+
+
 
 # Placeholder for X-Score installation
 # X-Score does not have a direct Conda or APT package; need to manually download it
@@ -74,19 +92,22 @@ FROM schrodinger/pymol:latest AS pymol
 #installed via conda
 
 # Install MGLTools for preparing PDBQT files
-RUN wget http://mgltools.scripps.edu/downloads/release/mgltools-1.5.6/MGLTools-1.5.6.tar.gz && \
-    tar -zxvf MGLTools-1.5.6.tar.gz && \
-    cd MGLTools-1.5.6 && \
+RUN wget https://ccsb.scripps.edu/download/532/ -O MGLTools-1.5.7.tar.gz && \
+    tar -zxvf MGLTools-1.5.7.tar.gz && \
+    cd mgltools_x86_64Linux2_1.5.7 && \
     ./install.sh -d /opt/mgltools && \
     ln -s /opt/mgltools/bin/pythonsh /usr/local/bin/pythonsh && \
     ln -s /opt/mgltools/bin/prepare_ligand4.py /usr/local/bin/prepare_ligand4.py && \
     ln -s /opt/mgltools/bin/prepare_receptor4.py /usr/local/bin/prepare_receptor4.py
 
+
+
+
+
 # Set the working directory
 WORKDIR /workspace
-COPY run_pipeline.sh /workspace/
-COPY main.nf /workspace/
-COPY scripts/ /workspace/scripts/
+COPY scripts/main.nf /workspace/
+
 
 # Set entrypoint
 ENTRYPOINT ["bash", "/workspace/run_pipeline.sh"]
