@@ -1,12 +1,17 @@
 params.databases = ["zinc", "chembl", "drugbank"] // List your databases
 params.protein = "protein.pdb"
 
+// Creating the input channel for databases
+Channel.from(params.databases)
+    .set { database_list }
+
+// Process to download molecules
 process download_molecules {
     input:
-    val db from params.databases
+    val db from database_list
 
     output:
-    path "data/zinc/${db}_downloaded_pdbqt/"
+    path "data/${db}/${db}_downloaded_pdbqt/" into downloaded_dirs
 
     script:
     if (db == "zinc") {
@@ -28,58 +33,67 @@ process download_molecules {
         """
     }
 }
+
+// Process to separate molecules
 process separate_molecules {
     input:
-    path input_dir from download_molecules.output
+    path input_dir from downloaded_dirs
 
     output:
-    path "data/zinc/${input_dir.getName()}_split_pdbqt/"
+    path "data/${input_dir.getBaseName()}_split_pdbqt/" into separated_dirs
 
     script:
     """
-    mkdir -p data/zinc/${input_dir.getName()}_split_pdbqt/
-    python scripts/pdbqt_separator.py --input_dir ${input_dir} --output_dir data/zinc/${input_dir.getName()}_split_pdbqt/
+    mkdir -p data/${input_dir.getBaseName()}_split_pdbqt/
+    python scripts/pdbqt_separator.py --input_dir ${input_dir} --output_dir data/${input_dir.getBaseName()}_split_pdbqt/
     """
 }
 
+// Process to run AutoDock Vina
 process autodock_vina {
     input:
-    path "data/zinc/${db}_downloaded_pdbqt/" from download_molecules.output
+    path split_dir from separated_dirs
     path params.protein
 
     output:
-    path "${db}_vina_output.pdbqt"
+    path "${split_dir.getBaseName()}_vina_output.pdbqt" into vina_outputs
 
+    script:
     """
-    autodock_vina --receptor ${params.protein} --ligand data/zinc/${db}_downloaded_pdbqt/*.pdbqt --out ${db}_vina_output.pdbqt
+    autodock_vina --receptor ${params.protein} --ligand ${split_dir}/*.pdbqt --out ${split_dir.getBaseName()}_vina_output.pdbqt
     """
 }
 
+// Process to run GNINA
 process gnina {
     input:
-    path "${db}_vina_output.pdbqt" from autodock_vina.output
+    path vina_output from vina_outputs
 
     output:
-    path "${db}_gnina_output.pdbqt"
+    path "${vina_output.getBaseName()}_gnina_output.pdbqt" into gnina_outputs
 
+    script:
     """
-    gnina --receptor ${params.protein} --ligand ${db}_vina_output.pdbqt --out ${db}_gnina_output.pdbqt
+    gnina --receptor ${params.protein} --ligand ${vina_output} --out ${vina_output.getBaseName()}_gnina_output.pdbqt
     """
 }
 
+// Process to run GROMACS
 process gromacs {
     input:
-    path "${db}_gnina_output.pdbqt" from gnina.output
+    path gnina_output from gnina_outputs
 
     output:
-    path "${db}_gromacs_output"
+    path "${gnina_output.getBaseName()}_gromacs_output"
 
+    script:
     """
-    gmx mdrun -s topol.tpr -o ${db}_gromacs_output
+    gmx mdrun -s topol.tpr -o ${gnina_output.getBaseName()}_gromacs_output
     """
 }
 
+// Workflow definition
 workflow {
-    download_molecules | autodock_vina | gnina | gromacs
+    download_molecules | separate_molecules | autodock_vina | gnina | gromacs
 }
 
