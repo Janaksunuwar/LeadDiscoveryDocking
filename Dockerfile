@@ -37,12 +37,20 @@ RUN apt-get update && apt-get install -y apt-transport-https ca-certificates gnu
     apt-add-repository 'deb https://apt.kitware.com/ubuntu/ jammy main' && \
     apt-get update && apt-get install -y cmake
 
-# Install Miniconda
-RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh && \
-    chmod +x /tmp/miniconda.sh && \
-    bash /tmp/miniconda.sh -b -p /opt/conda && \
-    rm /tmp/miniconda.sh
+# Install Miniforge (Multi-architecture support)
+RUN ARCH=$(uname -m) && \
+    if [ "$ARCH" = "x86_64" ]; then \
+        wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh -O /tmp/miniforge.sh; \
+    elif [ "$ARCH" = "aarch64" ]; then \
+        wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-aarch64.sh -O /tmp/miniforge.sh; \
+    else \
+        echo "Unsupported architecture: $ARCH"; exit 1; \
+    fi && \
+    chmod +x /tmp/miniforge.sh && \
+    bash /tmp/miniforge.sh -b -p /opt/conda && \
+    rm /tmp/miniforge.sh
 
+# Set Miniconda path
 ENV PATH="/opt/conda/bin:$PATH"
 
 # Create Conda environment for Python-based dependencies
@@ -54,11 +62,7 @@ RUN conda update -n base -c defaults conda && \
 # Install Python libraries outside of Conda (for global use)
 RUN pip3 install numpy pandas matplotlib scipy
 
-# Install a specific version of AutoDock Vina
-#RUN wget https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.3/vina_1.2.3_linux_x86_64 -O /usr/local/bin/vina && \
-#    chmod +x /usr/local/bin/vina
-
-# Install AutoDock Vina via Conda
+# Install a specific version of AutoDock Vina via Conda
 RUN conda install -c bioconda autodock-vina
 
 # Install RDKit manually
@@ -73,15 +77,6 @@ RUN wget https://github.com/gnina/gnina/releases/download/v1.3/gnina -O /usr/loc
 
 # Install PyMOL manually in the Dockerfile
 RUN apt-get update && apt-get install -y pymol
-
-# Placeholder for X-Score installation
-# X-Score does not have a direct Conda or APT package; need to manually download it
-# RUN wget <link-to-XScore> && tar -xvf <downloaded-package>
-# Please follow X-Score documentation for manual installation
-
-# Install PyMOL (or replace with ChimeraX/LigPlot if preferred)
-#RUN apt-get update && apt-get install -y pymol
-#installed via conda
 
 # Install MGLTools for preparing PDBQT files
 RUN wget https://ccsb.scripps.edu/download/532/ -O MGLTools-1.5.7.tar.gz && \
@@ -101,10 +96,10 @@ RUN wget -qO- https://get.nextflow.io | bash && \
     mv nextflow /usr/local/bin/ && \
     chmod +x /usr/local/bin/nextflow
 
-
 # Set the working directory
 WORKDIR /workspace
 COPY scripts/ /workspace/scripts/
 
 # Set entrypoint
 ENTRYPOINT ["bash", "/workspace/run_pipeline.sh"]
+
