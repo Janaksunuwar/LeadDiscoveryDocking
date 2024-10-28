@@ -67,7 +67,7 @@ RUN ARCH=$(uname -m) && \
     if [ "$ARCH" = "x86_64" ]; then \
         conda install -c bioconda autodock-vina; \
     else \
-        wget https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.3/vina_1.2.3_linux_aarch64 -O /usr/local/bin/vina && \
+        wget https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.3/vina_1.2.3_linux_arm64 -O /usr/local/bin/vina && \
         chmod +x /usr/local/bin/vina; \
     fi
 
