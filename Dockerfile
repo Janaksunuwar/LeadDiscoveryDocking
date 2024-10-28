@@ -62,8 +62,14 @@ RUN conda update -n base -c defaults conda && \
 # Install Python libraries outside of Conda (for global use)
 RUN pip3 install numpy pandas matplotlib scipy
 
-# Install a specific version of AutoDock Vina via Conda
-RUN conda install -c bioconda autodock-vina
+# Install AutoDock Vina manually for ARM compatibility
+RUN ARCH=$(uname -m) && \
+    if [ "$ARCH" = "x86_64" ]; then \
+        conda install -c bioconda autodock-vina; \
+    else \
+        wget https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.3/vina_1.2.3_linux_aarch64 -O /usr/local/bin/vina && \
+        chmod +x /usr/local/bin/vina; \
+    fi
 
 # Install RDKit manually
 RUN apt-get update && apt-get install -y python3-rdkit
