@@ -62,14 +62,16 @@ RUN conda update -n base -c defaults conda && \
 # Install Python libraries outside of Conda (for global use)
 RUN pip3 install numpy pandas matplotlib scipy
 
-# Install AutoDock Vina manually for ARM compatibility
+# Install AutoDock Vina for different architectures
 RUN ARCH=$(uname -m) && \
     if [ "$ARCH" = "x86_64" ]; then \
-        conda install -c bioconda autodock-vina; \
+        wget https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.5/vina_1.2.5_linux_x86_64 -O /usr/local/bin/vina; \
+    elif [ "$ARCH" = "aarch64" ]; then \
+        wget https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.5/vina_1.2.5_linux_aarch64 -O /usr/local/bin/vina; \
     else \
-        wget https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.3/vina_1.2.3_linux_arm64 -O /usr/local/bin/vina && \
-        chmod +x /usr/local/bin/vina; \
-    fi
+        echo "Unsupported architecture: $ARCH"; exit 1; \
+    fi && \
+    chmod +x /usr/local/bin/vina
 
 # Install RDKit manually
 RUN apt-get update && apt-get install -y python3-rdkit
@@ -81,8 +83,13 @@ RUN apt-get update && apt-get install -y gromacs
 RUN wget https://github.com/gnina/gnina/releases/download/v1.3/gnina -O /usr/local/bin/gnina && \
     chmod +x /usr/local/bin/gnina
 
-# Install PyMOL manually in the Dockerfile
-RUN apt-get update && apt-get install -y pymol
+# Install PyMOL from source
+RUN apt-get update && apt-get install -y libglew-dev libglm-dev libpng-dev libfreetype6-dev libxml2-dev libmsgpack-dev libpython3-dev && \
+    git clone https://github.com/schrodinger/pymol-open-source.git && \
+    git clone https://github.com/rcsb/mmtf-cpp.git && \
+    mv mmtf-cpp/include/mmtf* pymol-open-source/include/ && \
+    cd pymol-open-source && \
+    pip3 install .
 
 # Install MGLTools for preparing PDBQT files
 RUN wget https://ccsb.scripps.edu/download/532/ -O MGLTools-1.5.7.tar.gz && \
