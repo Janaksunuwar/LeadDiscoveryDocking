@@ -84,12 +84,27 @@ RUN wget https://github.com/gnina/gnina/releases/download/v1.3/gnina -O /usr/loc
     chmod +x /usr/local/bin/gnina
 
 # Install PyMOL from source
-RUN apt-get update && apt-get install -y libglew-dev libglm-dev libpng-dev libfreetype6-dev libxml2-dev libmsgpack-dev libpython3-dev && \
+RUN apt-get update && apt-get install -y \
+    libglew-dev \
+    libglm-dev \
+    libpng-dev \
+    libfreetype6-dev \
+    libxml2-dev \
+    libmsgpack-dev \
+    libpython3-dev \
+    freeglut3-dev \
+    libnetcdf-dev \
+    catch2 \
+    qtbase5-dev \
+    libqt5opengl5-dev \
+    python3-pyqt5 && \
     git clone https://github.com/schrodinger/pymol-open-source.git && \
     git clone https://github.com/rcsb/mmtf-cpp.git && \
     mv mmtf-cpp/include/mmtf* pymol-open-source/include/ && \
     cd pymol-open-source && \
-    pip3 install .
+    pip install build && \
+    pip install --verbose --no-build-isolation --config-settings testing=True .
+
 
 # Install MGLTools for preparing PDBQT files
 RUN wget https://ccsb.scripps.edu/download/532/ -O MGLTools-1.5.7.tar.gz && \
@@ -115,4 +130,3 @@ COPY scripts/ /workspace/scripts/
 
 # Set entrypoint
 ENTRYPOINT ["bash", "/workspace/run_pipeline.sh"]
-
