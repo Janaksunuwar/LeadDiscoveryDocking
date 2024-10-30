@@ -1,0 +1,85 @@
+Oct-23 15:39:44.061 [main] DEBUG nextflow.cli.Launcher - $> nextflow run ./scripts/test_main.nf -with-docker 'lead_discovery_docking:latest'
+Oct-23 15:39:44.117 [main] DEBUG nextflow.cli.CmdRun - N E X T F L O W  ~  version 24.04.4
+Oct-23 15:39:44.131 [main] DEBUG nextflow.plugin.PluginsFacade - Setting up plugin manager > mode=prod; embedded=false; plugins-dir=/Users/js1349/.nextflow/plugins; core-plugins: nf-amazon@2.5.3,nf-azure@1.6.1,nf-cloudcache@0.4.1,nf-codecommit@0.2.1,nf-console@1.1.3,nf-ga4gh@1.3.0,nf-google@1.13.2-patch1,nf-tower@1.9.1,nf-wave@1.4.2-patch1
+Oct-23 15:39:44.142 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+Oct-23 15:39:44.143 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+Oct-23 15:39:44.144 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.12.0 in 'deployment' mode
+Oct-23 15:39:44.153 [main] INFO  org.pf4j.AbstractPluginManager - No plugins
+Oct-23 15:39:44.190 [main] DEBUG nextflow.config.ConfigBuilder - Enabling execution in Docker container as requested by command-line option `-with-docker lead_discovery_docking:latest`
+Oct-23 15:39:44.199 [main] DEBUG nextflow.cli.CmdRun - Applied DSL=2 by global default
+Oct-23 15:39:44.209 [main] DEBUG nextflow.cli.CmdRun - Launching `./scripts/test_main.nf` [serene_magritte] DSL2 - revision: 43ce47b59e
+Oct-23 15:39:44.210 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins default=[]
+Oct-23 15:39:44.210 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins resolved requirement=[]
+Oct-23 15:39:44.244 [main] DEBUG nextflow.Session - Session UUID: 9b29e214-2c6b-4544-9afd-33d2f483be65
+Oct-23 15:39:44.245 [main] DEBUG nextflow.Session - Run name: serene_magritte
+Oct-23 15:39:44.245 [main] DEBUG nextflow.Session - Executor pool size: 11
+Oct-23 15:39:44.249 [main] DEBUG nextflow.file.FilePorter - File porter settings maxRetries=3; maxTransfers=50; pollTimeout=null
+Oct-23 15:39:44.252 [main] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'FileTransfer' minSize=10; maxSize=33; workQueue=LinkedBlockingQueue[10000]; allowCoreThreadTimeout=false
+Oct-23 15:39:44.293 [main] DEBUG nextflow.cli.CmdRun - 
+  Version: 24.04.4 build 5917
+  Created: 01-08-2024 07:05 UTC (02:05 CDT)
+  System: Mac OS X 14.3
+  Runtime: Groovy 4.0.21 on OpenJDK 64-Bit Server VM 17+35
+  Encoding: UTF-8 (UTF-8)
+  Process: 90148@hsc-304302 [10.21.1.105]
+  CPUs: 11 - Mem: 18 GB (48.7 MB) - Swap: 21 GB (710.6 MB)
+Oct-23 15:39:44.301 [main] DEBUG nextflow.Session - Work-dir: /Users/js1349/Desktop/UNTHSC/HSC_Janak/Amit_Dr_Vishownatha/Docking_Pipeline/LDTest/LeadDiscoveryDocking/work [Mac OS X]
+Oct-23 15:39:44.302 [main] DEBUG nextflow.Session - Script base path does not exist or is not a directory: /Users/js1349/Desktop/UNTHSC/HSC_Janak/Amit_Dr_Vishownatha/Docking_Pipeline/LDTest/LeadDiscoveryDocking/scripts/bin
+Oct-23 15:39:44.310 [main] DEBUG nextflow.executor.ExecutorFactory - Extension executors providers=[]
+Oct-23 15:39:44.315 [main] DEBUG nextflow.Session - Observer factory: DefaultObserverFactory
+Oct-23 15:39:44.329 [main] DEBUG nextflow.cache.CacheFactory - Using Nextflow cache factory: nextflow.cache.DefaultCacheFactory
+Oct-23 15:39:44.335 [main] DEBUG nextflow.util.CustomThreadPool - Creating default thread pool > poolSize: 12; maxThreads: 1000
+Oct-23 15:39:44.372 [main] DEBUG nextflow.Session - Session start
+Oct-23 15:39:44.616 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+Oct-23 15:39:44.621 [main] DEBUG n.secret.LocalSecretsProvider - Secrets store: /Users/js1349/.nextflow/secrets/store.json
+Oct-23 15:39:44.622 [main] DEBUG nextflow.secret.SecretsLoader - Discovered secrets providers: [nextflow.secret.LocalSecretsProvider@3fbe503c] - activable => nextflow.secret.LocalSecretsProvider@3fbe503c
+Oct-23 15:39:44.646 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+Oct-23 15:39:44.646 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Oct-23 15:39:44.648 [main] DEBUG nextflow.executor.Executor - [warm up] executor > local
+Oct-23 15:39:44.651 [main] DEBUG n.processor.LocalPollingMonitor - Creating local task monitor for executor 'local' > cpus=11; memory=18 GB; capacity=11; pollInterval=100ms; dumpInterval=5m
+Oct-23 15:39:44.652 [main] DEBUG n.processor.TaskPollingMonitor - >>> barrier register (monitor: local)
+Oct-23 15:39:44.701 [main] DEBUG nextflow.Session - Workflow process names [dsl2]: print_hello
+Oct-23 15:39:44.702 [main] DEBUG nextflow.Session - Igniting dataflow network (1)
+Oct-23 15:39:44.702 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > print_hello
+Oct-23 15:39:44.702 [main] DEBUG nextflow.script.ScriptRunner - Parsed script files:
+  Script_2b1189580f1cb48a: /Users/js1349/Desktop/UNTHSC/HSC_Janak/Amit_Dr_Vishownatha/Docking_Pipeline/LDTest/LeadDiscoveryDocking/scripts/test_main.nf
+Oct-23 15:39:44.702 [main] DEBUG nextflow.script.ScriptRunner - > Awaiting termination 
+Oct-23 15:39:44.702 [main] DEBUG nextflow.Session - Session await
+Oct-23 15:39:44.763 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-23 15:39:44.764 [Task submitter] INFO  nextflow.Session - [f6/7b4c33] Submitted process > print_hello
+Oct-23 15:39:46.612 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 1; name: print_hello; status: COMPLETED; exit: 127; error: -; workDir: /Users/js1349/Desktop/UNTHSC/HSC_Janak/Amit_Dr_Vishownatha/Docking_Pipeline/LDTest/LeadDiscoveryDocking/work/f6/7b4c33135702607ee1c58a88fedd36]
+Oct-23 15:39:46.612 [Task monitor] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'TaskFinalizer' minSize=10; maxSize=33; workQueue=LinkedBlockingQueue[10000]; allowCoreThreadTimeout=false
+Oct-23 15:39:46.615 [TaskFinalizer-1] DEBUG nextflow.processor.TaskProcessor - Handling unexpected condition for
+  task: name=print_hello; work-dir=/Users/js1349/Desktop/UNTHSC/HSC_Janak/Amit_Dr_Vishownatha/Docking_Pipeline/LDTest/LeadDiscoveryDocking/work/f6/7b4c33135702607ee1c58a88fedd36
+  error [nextflow.exception.ProcessFailedException]: Process `print_hello` terminated with an error exit status (127)
+Oct-23 15:39:46.623 [TaskFinalizer-1] ERROR nextflow.processor.TaskProcessor - Error executing process > 'print_hello'
+
+Caused by:
+  Process `print_hello` terminated with an error exit status (127)
+
+
+Command executed:
+
+  echo "Hello Janak"
+
+Command exit status:
+  127
+
+Command output:
+  (empty)
+
+Command error:
+  WARNING: The requested image's platform (linux/amd64) does not match the detected host platform (linux/arm64/v8) and no specific platform was requested
+  bash: /workspace/run_pipeline.sh: No such file or directory
+
+Work dir:
+  /Users/js1349/Desktop/UNTHSC/HSC_Janak/Amit_Dr_Vishownatha/Docking_Pipeline/LDTest/LeadDiscoveryDocking/work/f6/7b4c33135702607ee1c58a88fedd36
+
+Tip: when you have fixed the problem you can continue the execution adding the option `-resume` to the run command line
+Oct-23 15:39:46.626 [main] DEBUG nextflow.Session - Session await > all processes finished
+Oct-23 15:39:46.627 [TaskFinalizer-1] DEBUG nextflow.Session - Session aborted -- Cause: Process `print_hello` terminated with an error exit status (127)
+Oct-23 15:39:46.634 [main] DEBUG nextflow.Session - Session await > all barriers passed
+Oct-23 15:39:46.634 [Task monitor] DEBUG n.processor.TaskPollingMonitor - <<< barrier arrives (monitor: local) - terminating tasks monitor poll loop
+Oct-23 15:39:46.638 [main] DEBUG n.trace.WorkflowStatsObserver - Workflow completed > WorkflowStats[succeededCount=0; failedCount=1; ignoredCount=0; cachedCount=0; pendingCount=0; submittedCount=0; runningCount=0; retriesCount=0; abortedCount=0; succeedDuration=0ms; failedDuration=1.7s; cachedDuration=0ms;loadCpus=0; loadMemory=0; peakRunning=1; peakCpus=1; peakMemory=0; ]
+Oct-23 15:39:46.857 [main] DEBUG nextflow.cache.CacheDB - Closing CacheDB done
+Oct-23 15:39:46.866 [main] DEBUG nextflow.script.ScriptRunner - > Execution complete -- Goodbye

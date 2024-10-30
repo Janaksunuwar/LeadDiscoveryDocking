@@ -1,0 +1,67 @@
+Oct-29 16:30:33.467 [main] DEBUG nextflow.cli.Launcher - $> nextflow run test_main.nf -process.echo
+Oct-29 16:30:33.520 [main] DEBUG nextflow.cli.CmdRun - N E X T F L O W  ~  version 24.10.0
+Oct-29 16:30:33.533 [main] DEBUG nextflow.plugin.PluginsFacade - Setting up plugin manager > mode=prod; embedded=false; plugins-dir=/Users/js1349/.nextflow/plugins; core-plugins: nf-amazon@2.9.0,nf-azure@1.10.1,nf-cloudcache@0.4.2,nf-codecommit@0.2.2,nf-console@1.1.4,nf-google@1.15.2,nf-tower@1.9.3,nf-wave@1.7.2
+Oct-29 16:30:33.544 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+Oct-29 16:30:33.545 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+Oct-29 16:30:33.546 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.12.0 in 'deployment' mode
+Oct-29 16:30:33.554 [main] INFO  org.pf4j.AbstractPluginManager - No plugins
+Oct-29 16:30:33.567 [main] DEBUG nextflow.config.ConfigBuilder - Found config local: /Users/js1349/Desktop/UNTHSC/HSC_Janak/Amit_Dr_Vishownatha/Docking_Pipeline/LDTest/LeadDiscoveryDocking/scripts/nextflow.config
+Oct-29 16:30:33.569 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /Users/js1349/Desktop/UNTHSC/HSC_Janak/Amit_Dr_Vishownatha/Docking_Pipeline/LDTest/LeadDiscoveryDocking/scripts/nextflow.config
+Oct-29 16:30:33.583 [main] DEBUG n.secret.LocalSecretsProvider - Secrets store: /Users/js1349/.nextflow/secrets/store.json
+Oct-29 16:30:33.585 [main] DEBUG nextflow.secret.SecretsLoader - Discovered secrets providers: [nextflow.secret.LocalSecretsProvider@56f71edb] - activable => nextflow.secret.LocalSecretsProvider@56f71edb
+Oct-29 16:30:33.587 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `standard`
+Oct-29 16:30:33.788 [main] DEBUG nextflow.cli.CmdRun - Applied DSL=2 by global default
+Oct-29 16:30:33.796 [main] DEBUG nextflow.cli.CmdRun - Launching `test_main.nf` [naughty_darwin] DSL2 - revision: 22c663c573
+Oct-29 16:30:33.797 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins default=[]
+Oct-29 16:30:33.797 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins resolved requirement=[]
+Oct-29 16:30:33.822 [main] DEBUG nextflow.Session - Session UUID: 9c8ffb32-3d85-4d22-b5db-d7e17270150f
+Oct-29 16:30:33.822 [main] DEBUG nextflow.Session - Run name: naughty_darwin
+Oct-29 16:30:33.822 [main] DEBUG nextflow.Session - Executor pool size: 11
+Oct-29 16:30:33.826 [main] DEBUG nextflow.file.FilePorter - File porter settings maxRetries=3; maxTransfers=50; pollTimeout=null
+Oct-29 16:30:33.828 [main] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'FileTransfer' minSize=10; maxSize=33; workQueue=LinkedBlockingQueue[10000]; allowCoreThreadTimeout=false
+Oct-29 16:30:33.852 [main] DEBUG nextflow.cli.CmdRun - 
+  Version: 24.10.0 build 5928
+  Created: 27-10-2024 18:36 UTC (13:36 CDT)
+  System: Mac OS X 14.3
+  Runtime: Groovy 4.0.23 on OpenJDK 64-Bit Server VM 11.0.25+0
+  Encoding: UTF-8 (UTF-8)
+  Process: 31280@hsc-304302 [10.21.1.105]
+  CPUs: 11 - Mem: 18 GB (83.8 MB) - Swap: 30 GB (1.2 GB)
+Oct-29 16:30:33.859 [main] DEBUG nextflow.Session - Work-dir: /Users/js1349/Desktop/UNTHSC/HSC_Janak/Amit_Dr_Vishownatha/Docking_Pipeline/LDTest/LeadDiscoveryDocking/scripts/work [Mac OS X]
+Oct-29 16:30:33.859 [main] DEBUG nextflow.Session - Script base path does not exist or is not a directory: /Users/js1349/Desktop/UNTHSC/HSC_Janak/Amit_Dr_Vishownatha/Docking_Pipeline/LDTest/LeadDiscoveryDocking/scripts/bin
+Oct-29 16:30:33.865 [main] DEBUG nextflow.executor.ExecutorFactory - Extension executors providers=[]
+Oct-29 16:30:33.870 [main] DEBUG nextflow.Session - Observer factory: DefaultObserverFactory
+Oct-29 16:30:33.880 [main] DEBUG nextflow.cache.CacheFactory - Using Nextflow cache factory: nextflow.cache.DefaultCacheFactory
+Oct-29 16:30:33.886 [main] DEBUG nextflow.util.CustomThreadPool - Creating default thread pool > poolSize: 12; maxThreads: 1000
+Oct-29 16:30:33.915 [main] DEBUG nextflow.Session - Session start
+Oct-29 16:30:33.984 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+Oct-29 16:30:34.011 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: null
+Oct-29 16:30:34.011 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Oct-29 16:30:34.013 [main] DEBUG nextflow.executor.Executor - [warm up] executor > local
+Oct-29 16:30:34.016 [main] DEBUG n.processor.LocalPollingMonitor - Creating local task monitor for executor 'local' > cpus=11; memory=18 GB; capacity=11; pollInterval=100ms; dumpInterval=5m
+Oct-29 16:30:34.017 [main] DEBUG n.processor.TaskPollingMonitor - >>> barrier register (monitor: local)
+Oct-29 16:30:34.057 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: null
+Oct-29 16:30:34.057 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Oct-29 16:30:34.059 [main] DEBUG nextflow.Session - Workflow process names [dsl2]: sayHello, addStuff
+Oct-29 16:30:34.059 [main] DEBUG nextflow.Session - Igniting dataflow network (2)
+Oct-29 16:30:34.059 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > sayHello
+Oct-29 16:30:34.060 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > addStuff
+Oct-29 16:30:34.060 [main] DEBUG nextflow.script.ScriptRunner - Parsed script files:
+  Script_9287839a7d1241a9: /Users/js1349/Desktop/UNTHSC/HSC_Janak/Amit_Dr_Vishownatha/Docking_Pipeline/LDTest/LeadDiscoveryDocking/scripts/test_main.nf
+Oct-29 16:30:34.060 [main] DEBUG nextflow.script.ScriptRunner - > Awaiting termination 
+Oct-29 16:30:34.060 [main] DEBUG nextflow.Session - Session await
+Oct-29 16:30:34.137 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-29 16:30:34.139 [Task submitter] INFO  nextflow.Session - [05/0ee150] Submitted process > sayHello
+Oct-29 16:30:34.160 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 1; name: sayHello; status: COMPLETED; exit: 0; error: -; workDir: /Users/js1349/Desktop/UNTHSC/HSC_Janak/Amit_Dr_Vishownatha/Docking_Pipeline/LDTest/LeadDiscoveryDocking/scripts/work/05/0ee15041fb6bc1046c9b6a3563de6b]
+Oct-29 16:30:34.175 [Task monitor] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'TaskFinalizer' minSize=10; maxSize=33; workQueue=LinkedBlockingQueue[10000]; allowCoreThreadTimeout=false
+Oct-29 16:30:34.181 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-29 16:30:34.181 [Task submitter] INFO  nextflow.Session - [98/c98f04] Submitted process > addStuff
+Oct-29 16:30:34.262 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 2; name: addStuff; status: COMPLETED; exit: 0; error: -; workDir: /Users/js1349/Desktop/UNTHSC/HSC_Janak/Amit_Dr_Vishownatha/Docking_Pipeline/LDTest/LeadDiscoveryDocking/scripts/work/98/c98f04d0e07776ddf7f7c282f1e156]
+Oct-29 16:30:34.263 [main] DEBUG nextflow.Session - Session await > all processes finished
+Oct-29 16:30:34.366 [Task monitor] DEBUG n.processor.TaskPollingMonitor - <<< barrier arrives (monitor: local) - terminating tasks monitor poll loop
+Oct-29 16:30:34.367 [main] DEBUG nextflow.Session - Session await > all barriers passed
+Oct-29 16:30:34.368 [main] DEBUG nextflow.util.ThreadPoolManager - Thread pool 'TaskFinalizer' shutdown completed (hard=false)
+Oct-29 16:30:34.371 [main] DEBUG n.trace.WorkflowStatsObserver - Workflow completed > WorkflowStats[succeededCount=2; failedCount=0; ignoredCount=0; cachedCount=0; pendingCount=0; submittedCount=0; runningCount=0; retriesCount=0; abortedCount=0; succeedDuration=1ms; failedDuration=0ms; cachedDuration=0ms;loadCpus=0; loadMemory=0; peakRunning=1; peakCpus=1; peakMemory=0; ]
+Oct-29 16:30:34.382 [main] DEBUG nextflow.cache.CacheDB - Closing CacheDB done
+Oct-29 16:30:34.391 [main] DEBUG nextflow.util.ThreadPoolManager - Thread pool 'FileTransfer' shutdown completed (hard=false)
+Oct-29 16:30:34.391 [main] DEBUG nextflow.script.ScriptRunner - > Execution complete -- Goodbye

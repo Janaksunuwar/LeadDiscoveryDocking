@@ -1,0 +1,47 @@
+Oct-23 15:31:09.962 [main] DEBUG nextflow.cli.Launcher - $> nextflow run ./scripts/test_main.nf -with-docker 'lead_discovery_docking:latest'
+Oct-23 15:31:10.012 [main] DEBUG nextflow.cli.CmdRun - N E X T F L O W  ~  version 24.04.4
+Oct-23 15:31:10.026 [main] DEBUG nextflow.plugin.PluginsFacade - Setting up plugin manager > mode=prod; embedded=false; plugins-dir=/Users/js1349/.nextflow/plugins; core-plugins: nf-amazon@2.5.3,nf-azure@1.6.1,nf-cloudcache@0.4.1,nf-codecommit@0.2.1,nf-console@1.1.3,nf-ga4gh@1.3.0,nf-google@1.13.2-patch1,nf-tower@1.9.1,nf-wave@1.4.2-patch1
+Oct-23 15:31:10.036 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+Oct-23 15:31:10.036 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+Oct-23 15:31:10.038 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.12.0 in 'deployment' mode
+Oct-23 15:31:10.044 [main] INFO  org.pf4j.AbstractPluginManager - No plugins
+Oct-23 15:31:10.075 [main] DEBUG nextflow.config.ConfigBuilder - Enabling execution in Docker container as requested by command-line option `-with-docker lead_discovery_docking:latest`
+Oct-23 15:31:10.083 [main] DEBUG nextflow.cli.CmdRun - Applied DSL=2 by global default
+Oct-23 15:31:10.092 [main] DEBUG nextflow.cli.CmdRun - Launching `./scripts/test_main.nf` [exotic_kilby] DSL2 - revision: cd8457f6ee
+Oct-23 15:31:10.093 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins default=[]
+Oct-23 15:31:10.093 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins resolved requirement=[]
+Oct-23 15:31:10.127 [main] DEBUG nextflow.Session - Session UUID: f137d60c-225c-4e7b-9054-b74a8dfd4606
+Oct-23 15:31:10.127 [main] DEBUG nextflow.Session - Run name: exotic_kilby
+Oct-23 15:31:10.127 [main] DEBUG nextflow.Session - Executor pool size: 11
+Oct-23 15:31:10.133 [main] DEBUG nextflow.file.FilePorter - File porter settings maxRetries=3; maxTransfers=50; pollTimeout=null
+Oct-23 15:31:10.135 [main] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'FileTransfer' minSize=10; maxSize=33; workQueue=LinkedBlockingQueue[10000]; allowCoreThreadTimeout=false
+Oct-23 15:31:10.177 [main] DEBUG nextflow.cli.CmdRun - 
+  Version: 24.04.4 build 5917
+  Created: 01-08-2024 07:05 UTC (02:05 CDT)
+  System: Mac OS X 14.3
+  Runtime: Groovy 4.0.21 on OpenJDK 64-Bit Server VM 17+35
+  Encoding: UTF-8 (UTF-8)
+  Process: 88639@hsc-304302 [10.21.1.105]
+  CPUs: 11 - Mem: 18 GB (49.2 MB) - Swap: 22 GB (1.5 GB)
+Oct-23 15:31:10.184 [main] DEBUG nextflow.Session - Work-dir: /Users/js1349/Desktop/UNTHSC/HSC_Janak/Amit_Dr_Vishownatha/Docking_Pipeline/LDTest/LeadDiscoveryDocking/work [Mac OS X]
+Oct-23 15:31:10.184 [main] DEBUG nextflow.Session - Script base path does not exist or is not a directory: /Users/js1349/Desktop/UNTHSC/HSC_Janak/Amit_Dr_Vishownatha/Docking_Pipeline/LDTest/LeadDiscoveryDocking/scripts/bin
+Oct-23 15:31:10.193 [main] DEBUG nextflow.executor.ExecutorFactory - Extension executors providers=[]
+Oct-23 15:31:10.197 [main] DEBUG nextflow.Session - Observer factory: DefaultObserverFactory
+Oct-23 15:31:10.209 [main] DEBUG nextflow.cache.CacheFactory - Using Nextflow cache factory: nextflow.cache.DefaultCacheFactory
+Oct-23 15:31:10.214 [main] DEBUG nextflow.util.CustomThreadPool - Creating default thread pool > poolSize: 12; maxThreads: 1000
+Oct-23 15:31:10.246 [main] DEBUG nextflow.Session - Session start
+Oct-23 15:31:10.471 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+Oct-23 15:31:10.475 [main] DEBUG n.secret.LocalSecretsProvider - Secrets store: /Users/js1349/.nextflow/secrets/store.json
+Oct-23 15:31:10.476 [main] DEBUG nextflow.secret.SecretsLoader - Discovered secrets providers: [nextflow.secret.LocalSecretsProvider@ee8e7ff] - activable => nextflow.secret.LocalSecretsProvider@ee8e7ff
+Oct-23 15:31:10.487 [main] DEBUG nextflow.Session - Workflow process names [dsl2]: read_uri_file
+Oct-23 15:31:10.488 [main] DEBUG nextflow.Session - Igniting dataflow network (0)
+Oct-23 15:31:10.488 [main] DEBUG nextflow.script.ScriptRunner - Parsed script files:
+  Script_7aa8c7bffecc2011: /Users/js1349/Desktop/UNTHSC/HSC_Janak/Amit_Dr_Vishownatha/Docking_Pipeline/LDTest/LeadDiscoveryDocking/scripts/test_main.nf
+Oct-23 15:31:10.488 [main] DEBUG nextflow.script.ScriptRunner - > Awaiting termination 
+Oct-23 15:31:10.488 [main] DEBUG nextflow.Session - Session await
+Oct-23 15:31:10.488 [main] DEBUG nextflow.Session - Session await > all processes finished
+Oct-23 15:31:10.488 [main] DEBUG nextflow.Session - Session await > all barriers passed
+Oct-23 15:31:10.491 [main] DEBUG n.trace.WorkflowStatsObserver - Workflow completed > WorkflowStats[succeededCount=0; failedCount=0; ignoredCount=0; cachedCount=0; pendingCount=0; submittedCount=0; runningCount=0; retriesCount=0; abortedCount=0; succeedDuration=0ms; failedDuration=0ms; cachedDuration=0ms;loadCpus=0; loadMemory=0; peakRunning=0; peakCpus=0; peakMemory=0; ]
+Oct-23 15:31:10.666 [main] DEBUG nextflow.cache.CacheDB - Closing CacheDB done
+Oct-23 15:31:10.678 [main] DEBUG nextflow.util.ThreadPoolManager - Thread pool 'FileTransfer' shutdown completed (hard=false)
+Oct-23 15:31:10.678 [main] DEBUG nextflow.script.ScriptRunner - > Execution complete -- Goodbye
