@@ -44,6 +44,7 @@ process p3 {
 
 workflow {
     sayHello()
+    sayHi()
     addStuff()
     p3()
 }
