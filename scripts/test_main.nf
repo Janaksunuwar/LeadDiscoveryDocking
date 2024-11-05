@@ -4,9 +4,18 @@ process sayHello {
     
     script:
     """
-    echo "hello janak"
+    echo "hello how are you doingg?"
     """
 }
+
+process sayHi {
+    
+    script:
+    """
+    echo "Hi there"
+    """
+}
+
 
 process addStuff {
     
