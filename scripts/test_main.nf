@@ -8,15 +8,6 @@ process sayHello {
     """
 }
 
-process sayHi {
-    
-    script:
-    """
-    echo "Hi there"
-    """
-}
-
-
 process addStuff {
     
     script:
@@ -40,13 +31,8 @@ process p3 {
 }
 
 
-
-
 workflow {
     sayHello()
-    sayHi()
     addStuff()
     p3()
 }
-
-
