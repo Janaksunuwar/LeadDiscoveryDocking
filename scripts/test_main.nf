@@ -30,7 +30,6 @@ process p3 {
     """
 }
 
-
 workflow {
     sayHello()
     addStuff()
