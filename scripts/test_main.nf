@@ -5,6 +5,7 @@ Channel
     .set { url_files }
 
 //Testing channels' input and output settings
+
 process testChannel {
     input:
     path url_file from url_files
@@ -70,8 +71,7 @@ process znDownload {
     python3 scripts/test_hi.py
     """
 }
-
-
+ 
 workflow {
     testChannel()
     sayHello()
@@ -80,3 +80,6 @@ workflow {
     //znDownload()
     //downloaded_files.view()
 }
+
+//WORK FROM HERE:
+
