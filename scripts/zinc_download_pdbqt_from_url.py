@@ -5,10 +5,7 @@ import shutil
 # from tqdm import tqdm
 
 def download_pdbqt_files(uri_file, output_dir):
-    # Create the output directory if it doesn't exist
-    os.makedirs(output_dir, exist_ok=True)
-    print(f"[DEBUG] Output directory ensured: {output_dir}")
-    print(f"[DEBUG] Current working directory: {os.getcwd()}")
+    print(f"[DEBUG] Output directory: {output_dir}")
 
     # Read URLs from the uri file
     with open(uri_file, 'r') as file:
@@ -25,18 +22,14 @@ def download_pdbqt_files(uri_file, output_dir):
         output_path = os.path.join(output_dir, file_name)
 
         print(f"[DEBUG] Processing URL: {url}")
-        if not os.path.exists(output_path):
-            try:
-                # Run wget command to download the file
-                subprocess.run(["wget", url, "-O", output_path], check=True)
-                print(f"Downloaded: {file_name}")
-                print(f"[DEBUG] File saved at: {output_path}")
-            except subprocess.CalledProcessError as e:
-                print(f"Error downloading {file_name}: {e}")
-            except Exception as e:
-                print(f"Unexpected error downloading {file_name}: {e}")
-        else:
-            print(f"Skipping {file_name}, already exists.")
+        try:
+            # Run wget command to download the file
+            subprocess.run(["wget", url, "-O", output_path], check=True)
+            print(f"[DEBUG] Downloaded: {file_name}")
+        except subprocess.CalledProcessError as e:
+            print(f"[ERROR] Error downloading {file_name}: {e}")
+        except Exception as e:
+            print(f"[ERROR] Unexpected error downloading {file_name}: {e}")
 
         # Unzip the .gz file if it was downloaded successfully
         if output_path.endswith(".gz") and os.path.exists(output_path):
@@ -45,13 +38,13 @@ def download_pdbqt_files(uri_file, output_dir):
                 with gzip.open(output_path, 'rb') as f_in:
                     with open(decompressed_path, 'wb') as f_out:
                         shutil.copyfileobj(f_in, f_out)
-                print(f"Unzipped: {decompressed_path}")
+                print(f"[DEBUG] Unzipped: {decompressed_path}")
 
                 # Remove the .gz file after unzipping
                 os.remove(output_path)
-                print(f"Removed: {output_path}")
+                print(f"[DEBUG] Removed: {output_path}")
             except Exception as e:
-                print(f"Error unzipping {file_name}: {e}")
+                print(f"[ERROR] Error unzipping {file_name}: {e}")
 
 def separate_molecules(input_dir):
     print(f"[DEBUG] Starting molecule separation in directory: {input_dir}")
@@ -71,12 +64,18 @@ def separate_molecules(input_dir):
                     output_path = os.path.join(input_dir, f"{file_name[:-6]}_molecule_{idx}.pdbqt")
                     with open(output_path, 'w') as f_out:
                         f_out.write(molecule)
-                    print(f"Separated molecule {idx} from {file_name} into {output_path}")
+                    print(f"[DEBUG] Separated molecule {idx} from {file_name} into {output_path}")
+
+                # Remove the original pdbqt file after separation
+                os.remove(input_path)
+                print(f"[DEBUG] Removed original file: {input_path}")
             except Exception as e:
-                print(f"Error processing file {file_name} for molecule separation: {e}")
+                print(f"[ERROR] Error processing file {file_name} for molecule separation: {e}")
 
 def main(uri_file, output_dir):
     print(f"[DEBUG] Starting main function with uri_file: {uri_file}, output_dir: {output_dir}")
+    # Print current working directory for debugging
+    print(f"[DEBUG] Current working directory: {os.getcwd()}")
     # Download PDBQT files from the uri file
     download_pdbqt_files(uri_file, output_dir)
 
@@ -92,4 +91,3 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     main(args.uri_file, args.output_dir)
-
