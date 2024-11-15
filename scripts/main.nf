@@ -1,52 +1,72 @@
-params.databases = ["zinc", "chembl", "drugbank"] // List your databases
-params.protein = "protein.pdb"
+#!/usr/bin/env nextflow
 
-// Creating the input channel for databases
-Channel.from(params.databases)
-    .set { database_list }
+log.info """
+    L E A D - D I S C O V E R Y  P I P E L I N E 
+    ============================================
+    Developed by: Janak Sunuwar, Ph.D,
+    UNIVERSITY OF NORTH TEXAS HEALTH SCIENCES CENTER
+    @2024
 
-// Process to download molecules
-process download_molecules {
+    """
+    
+// Pipeline parameters
+params.zn_dwnl_script = "${System.getProperty('user.dir')}/scripts/zn_download_pdbqt_from_url.py"
+params.zn_separator_script = "${System.getProperty('user.dir')}/scripts/separate_molecules_from_pdbqt.py"
+params.uri_file = "${System.getProperty('user.dir')}/data/zinc/zn_test_uri.uri"
+params.zn_download_dir = "${System.getProperty('user.dir')}/data/zinc/zn_downloaded/"
+params.zn_separated_dir = "${System.getProperty('user.dir')}/data/zinc/zn_separated/"
+
+println "[DEBUG] URI file: ${params.uri_file}"
+println "[DEBUG] Download directory: ${params.zn_download_dir}"
+println "[DEBUG] Separated directory: ${params.zn_separated_dir}"
+
+// Process to download PDBQT files from given URLs
+process pdbqt_Download {
+    publishDir("${params.zn_download_dir}", mode: 'copy')
+    
     input:
-    val db from database_list
+    path zn_dwnl_script
+    path uri_file
 
     output:
-    path "data/${db}/${db}_downloaded_pdbqt/" into downloaded_dirs
+    path "*.pdbqt", emit: downloaded_files
 
     script:
-    if (db == "zinc") {
-        """
-        mkdir -p data/zinc/${db}_downloaded_pdbqt/
-        python scripts/zinc_download_pdbqt_from_url.py --data/zinc/uri_file data/zinc/ZINC-downloader-3D-pdbqt.gz.uri --output data/zinc/${db}_downloaded_pdbqt/
-        """
-    } else if (db == "chembl") {
-        """
-        # Placeholder for ChemBL download script
-        mkdir -p data/chembl/${db}_downloaded_pdbqt
-        echo "Downloading ChemBL data..." > data/chembl/${db}_downloaded_pdbqt/${db}_chembl_placeholder.pdbqt
-        """
-    } else if (db == "drugbank") {
-        """
-        # Placeholder for DrugBank download script
-        mkdir -p data/drugbank/${db}_downloaded_pdbqt
-        echo "Downloading DrugBank data..." > data/drugbank/${db}_downloaded_pdbqt/${db}_drugbank_placeholder.pdbqt
-        """
-    }
+    """
+    python3 ${zn_dwnl_script} --uri_file ${uri_file}
+    """
 }
 
-// Process to separate molecules
+// Process to separate molecules from the downloaded PDBQT files
 process separate_molecules {
+    publishDir(params.zn_separated_dir, mode: 'copy')
+    
     input:
-    path input_dir from downloaded_dirs
+    path gz_files
+
 
     output:
-    path "data/${input_dir.getBaseName()}_split_pdbqt/" into separated_dirs
-
+    path "*.pdbqt", emit: separated_files
+ 
     script:
     """
-    mkdir -p data/${input_dir.getBaseName()}_split_pdbqt/
-    python scripts/pdbqt_separator.py --input_dir ${input_dir} --output_dir data/${input_dir.getBaseName()}_split_pdbqt/
+    python3 ${params.zn_separator_script} --input_files ${gz_files} 
     """
+}
+
+//WORK FROM HERE .....
+// PASS The pdbqt files to AUTODOCK VINA..
+// IMPORT OUR PROTEIN OF INTEREST
+
+
+workflow {
+    // First, run the downloader process
+    def dwn_ch = Channel.fromPath(params.zn_dwnl_script)
+    def uri_ch = Channel.fromPath(params.uri_file)
+    def download_result = pdbqt_Download(dwn_ch, uri_ch)
+
+    // Use the output from downloader to run the separator process
+    separate_molecules(download_result.downloaded_files)
 }
 
 // Process to run AutoDock Vina
