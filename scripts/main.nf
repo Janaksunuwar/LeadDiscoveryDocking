@@ -42,7 +42,7 @@ process separate_molecules {
     publishDir(params.zn_separated_dir, mode: 'copy')
     
     input:
-    path gz_files
+    path pdbqt_unseparated_files
 
 
     output:
@@ -50,7 +50,7 @@ process separate_molecules {
  
     script:
     """
-    python3 ${params.zn_separator_script} --input_files ${gz_files} 
+    python3 ${params.zn_separator_script} --input_files ${pdbqt_unseparated_files} 
     """
 }
 
@@ -111,6 +111,7 @@ process gromacs {
     gmx mdrun -s topol.tpr -o ${gnina_output.getBaseName()}_gromacs_output
     """
 }
+
 
 // Workflow definition
 workflow {
