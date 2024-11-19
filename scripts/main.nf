@@ -36,7 +36,6 @@ process pdbqt_Download {
     python3 ${zn_dwnl_script} --uri_file ${uri_file}
     """
 }
-
 // Process to separate molecules from the downloaded PDBQT files
 process separate_molecules {
     publishDir(params.zn_separated_dir, mode: 'copy')
@@ -97,7 +96,6 @@ process gnina {
     gnina --receptor ${params.protein} --ligand ${vina_output} --out ${vina_output.getBaseName()}_gnina_output.pdbqt
     """
 }
-
 // Process to run GROMACS
 process gromacs {
     input:
@@ -112,9 +110,7 @@ process gromacs {
     """
 }
 
-
 // Workflow definition
 workflow {
     download_molecules | separate_molecules | autodock_vina | gnina | gromacs
 }
-
