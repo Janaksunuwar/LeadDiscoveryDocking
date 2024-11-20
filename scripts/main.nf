@@ -96,6 +96,8 @@ process gnina {
     gnina --receptor ${params.protein} --ligand ${vina_output} --out ${vina_output.getBaseName()}_gnina_output.pdbqt
     """
 }
+
+
 // Process to run GROMACS
 process gromacs {
     input:
