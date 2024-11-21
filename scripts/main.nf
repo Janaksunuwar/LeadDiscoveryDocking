@@ -7,8 +7,7 @@ log.info """
     UNIVERSITY OF NORTH TEXAS HEALTH SCIENCES CENTER
     @2024
 
-    """
-    
+    """  
 // Pipeline parameters
 params.zn_dwnl_script = "${System.getProperty('user.dir')}/scripts/zn_download_pdbqt_from_url.py"
 params.zn_separator_script = "${System.getProperty('user.dir')}/scripts/separate_molecules_from_pdbqt.py"
@@ -57,7 +56,6 @@ process separate_molecules {
 // PASS The pdbqt files to AUTODOCK VINA..
 // IMPORT OUR PROTEIN OF INTEREST
 
-
 workflow {
     // First, run the downloader process
     def dwn_ch = Channel.fromPath(params.zn_dwnl_script)
@@ -97,7 +95,6 @@ process gnina {
     """
 }
 
-
 // Process to run GROMACS
 process gromacs {
     input:
@@ -111,7 +108,6 @@ process gromacs {
     gmx mdrun -s topol.tpr -o ${gnina_output.getBaseName()}_gromacs_output
     """
 }
-
 // Workflow definition
 workflow {
     download_molecules | separate_molecules | autodock_vina | gnina | gromacs
