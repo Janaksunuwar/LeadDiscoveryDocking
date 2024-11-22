@@ -15,27 +15,47 @@ params.zn_separator_script = "${System.getProperty('user.dir')}/scripts/separate
 params.uri_file = "${System.getProperty('user.dir')}/data/zinc/zn_test_uri.uri"
 params.zn_download_dir = "${System.getProperty('user.dir')}/data/zinc/zn_downloaded/"
 params.zn_separated_dir = "${System.getProperty('user.dir')}/data/zinc/zn_separated/"
+params.chembl_download_dir = "${System.getProperty('user.dir')}/data/chembl/"
 
 println "[DEBUG] URI file: ${params.uri_file}"
 println "[DEBUG] Download directory: ${params.zn_download_dir}"
 println "[DEBUG] Separated directory: ${params.zn_separated_dir}"
 
 // Process to download PDBQT files from given URLs
-process pdbqt_Download {
+process zn_Download {
     publishDir("${params.zn_download_dir}", mode: 'copy')
     
     input:
-    path zn_dwnl_script
+    // path zn_dwnl_script
     path uri_file
 
     output:
-    path "*.pdbqt", emit: downloaded_files
+    path "*.txt", emit: downloaded_files
 
     script:
     """
-    python3 ${zn_dwnl_script} --uri_file ${uri_file}
+    wget -i ${uri_file} 
+    
     """
+    // Alternatively python script can be used to download zn SDF files from the URI, but seems a bit cumbersome
+    // python3 ${zn_dwnl_script} --uri_file ${uri_file}
 }
+
+WORK FROM HERE.....
+DOWNLOAD PROCESS chembl SDFs
+DOWNLOAD PROCESS PUBCHEM SDFs
+
+
+process chembl_download {
+    publishDir("$params.chembl_download_dir}", mode: 'copy')
+}
+
+
+
+process
+
+
+
 
 // Process to separate molecules from the downloaded PDBQT files
 process separate_molecules {
@@ -54,16 +74,23 @@ process separate_molecules {
     """
 }
 
+
 // Workflow
 workflow {
     // First, run the downloader process
-    def dwn_ch = Channel.fromPath(params.zn_dwnl_script)
-    def uri_ch = Channel.fromPath(params.uri_file)
-    def download_result = pdbqt_Download(dwn_ch, uri_ch)
+    // def zn_dwn_ch = Channel.fromPath(params.zn_dwnl_script)
+    def zn_uri_ch = Channel.fromPath(params.uri_file)
+    zn_Download(zn_uri_ch)
+    // def zn_download_result = zn_Download(dwn_ch, uri_ch)
 
     // Use the output from downloader to run the separator process
-    separate_molecules(download_result.downloaded_files)
+    // separate_molecules(download_result.downloaded_files)
 }
+
+
+
+
+
 
 // nextflow.enable.dsl=2
 
