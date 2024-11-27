@@ -59,8 +59,6 @@ process bindingdb_download {
 
     wget -i https://www.bindingdb.org/bind/downloads/BindingDB_All_3D_202411_sdf.zip
 
-    
-
     """
 }
 //download sdf from chembl with wget and the ftp link provided in the website
@@ -133,7 +131,6 @@ process separate_molecules {
     """
 }
 
-
 // Workflow
 workflow {
     def zn_uri_ch = Channel.fromPath(params.uri_file)
@@ -147,6 +144,3 @@ workflow {
     bindingdb_download()
     
     }
-
-
-    
