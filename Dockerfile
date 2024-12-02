@@ -6,6 +6,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Update the system and install core dependencies
 RUN apt-get update && apt-get install -y \
+    unzip \
     wget \
     curl \
     build-essential \
@@ -40,11 +41,11 @@ RUN apt-get update && apt-get install -y apt-transport-https ca-certificates gnu
 # Install Miniforge (Multi-architecture support)
 RUN ARCH=$(uname -m) && \
     if [ "$ARCH" = "x86_64" ]; then \
-        wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh -O /tmp/miniforge.sh; \
+    wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh -O /tmp/miniforge.sh; \
     elif [ "$ARCH" = "aarch64" ]; then \
-        wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-aarch64.sh -O /tmp/miniforge.sh; \
+    wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-aarch64.sh -O /tmp/miniforge.sh; \
     else \
-        echo "Unsupported architecture: $ARCH"; exit 1; \
+    echo "Unsupported architecture: $ARCH"; exit 1; \
     fi && \
     chmod +x /tmp/miniforge.sh && \
     bash /tmp/miniforge.sh -b -p /opt/conda && \
@@ -65,11 +66,11 @@ RUN pip3 install numpy pandas matplotlib scipy
 # Install AutoDock Vina for different architectures
 RUN ARCH=$(uname -m) && \
     if [ "$ARCH" = "x86_64" ]; then \
-        wget https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.5/vina_1.2.5_linux_x86_64 -O /usr/local/bin/vina; \
+    wget https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.5/vina_1.2.5_linux_x86_64 -O /usr/local/bin/vina; \
     elif [ "$ARCH" = "aarch64" ]; then \
-        wget https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.5/vina_1.2.5_linux_aarch64 -O /usr/local/bin/vina; \
+    wget https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.5/vina_1.2.5_linux_aarch64 -O /usr/local/bin/vina; \
     else \
-        echo "Unsupported architecture: $ARCH"; exit 1; \
+    echo "Unsupported architecture: $ARCH"; exit 1; \
     fi && \
     chmod +x /usr/local/bin/vina
 
