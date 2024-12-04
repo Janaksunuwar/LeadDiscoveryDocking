@@ -129,8 +129,6 @@ RUN wget -qO- https://get.nextflow.io | bash && \
 WORKDIR /workspace
 COPY scripts/ /workspace/scripts/
 
-
-
 # Set entrypoint
 ENTRYPOINT ["bash", "/workspace/run_pipeline.sh"]
 
