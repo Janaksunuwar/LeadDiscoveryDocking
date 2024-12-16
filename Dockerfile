@@ -120,8 +120,6 @@ RUN wget https://ccsb.scripps.edu/download/532/ -O MGLTools-1.5.7.tar.gz && \
 RUN apt-get update && apt-get install -y openjdk-11-jdk && \
     rm -rf /var/lib/apt/lists/*
 
-
-
 # Install Nextflow
 RUN wget -qO- https://get.nextflow.io | bash && \
     mv nextflow /usr/local/bin/ && \
@@ -133,4 +131,3 @@ COPY scripts/ /workspace/scripts/
 
 # Set entrypoint
 ENTRYPOINT ["bash", "/workspace/run_pipeline.sh"]
-
