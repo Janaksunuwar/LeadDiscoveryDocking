@@ -131,3 +131,6 @@ COPY scripts/ /workspace/scripts/
 
 # Set entrypoint
 ENTRYPOINT ["bash", "/workspace/run_pipeline.sh"]
+
+
+
