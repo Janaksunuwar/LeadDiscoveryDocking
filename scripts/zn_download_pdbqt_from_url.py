@@ -40,7 +40,5 @@ if __name__ == "__main__":
     parser.add_argument('--uri_file', type=str, required=True, help='Path to the URI file containing download links.')
     parser.add_argument('--output_dir', type=str, required=True, help='Directory to store downloaded PDBQT files.')
 
-
-
     args = parser.parse_args()
     download_pdbqt_files(args.uri_file, args.output_dir)
