@@ -2,6 +2,7 @@ import os
 import subprocess
 import argparse
 
+
 def download_pdbqt_files(uri_file, output_dir):
     # Create the output directory if it doesn't exist
     os.makedirs(output_dir, exist_ok=True)
@@ -38,6 +39,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Download PDBQT files from URLs in a URI file.")
     parser.add_argument('--uri_file', type=str, required=True, help='Path to the URI file containing download links.')
     parser.add_argument('--output_dir', type=str, required=True, help='Directory to store downloaded PDBQT files.')
+
+
 
     args = parser.parse_args()
     download_pdbqt_files(args.uri_file, args.output_dir)
