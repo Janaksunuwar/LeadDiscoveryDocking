@@ -7,7 +7,8 @@ log.info """
     UNIVERSITY OF NORTH TEXAS HEALTH SCIENCES CENTER, Fort Worth, TX
     @2024
 
-    """  
+    """
+
 // Pipeline parameters
 params.zn_dwnl_script = "${System.getProperty('user.dir')}/scripts/zn_download_pdbqt_from_url.py"
 params.zn_separator_script = "${System.getProperty('user.dir')}/scripts/separate_molecules_from_pdbqt.py"
@@ -41,7 +42,6 @@ process separate_molecules {
     
     input:
     path pdbqt_unseparated_files
-
 
     output:
     path "*.pdbqt", emit: separated_files
@@ -98,7 +98,6 @@ process gnina {
     gnina --receptor ${params.protein} --ligand ${vina_output} --out ${vina_output.getBaseName()}_gnina_output.pdbqt
     """
 }
-
 
 // Process to run GROMACS
 process gromacs {
