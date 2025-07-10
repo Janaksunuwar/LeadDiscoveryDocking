@@ -52,9 +52,11 @@ process separate_molecules {
     """
 }
 
+// Channel to hold the separated directories
 //WORK FROM HERE .....
 // PASS The pdbqt files to AUTODOCK VINA..
 // IMPORT OUR PROTEIN OF INTEREST
+
 
 workflow {
     // First, run the downloader process
@@ -65,6 +67,7 @@ workflow {
     // Use the output from downloader to run the separator process
     separate_molecules(download_result.downloaded_files)
 }
+
 
 // Process to run AutoDock Vina
 process autodock_vina {
@@ -81,6 +84,7 @@ process autodock_vina {
     """
 }
 
+
 // Process to run GNINA
 process gnina {
     input:
@@ -95,6 +99,7 @@ process gnina {
     """
 }
 
+
 // Process to run GROMACS
 process gromacs {
     input:
@@ -108,6 +113,7 @@ process gromacs {
     gmx mdrun -s topol.tpr -o ${gnina_output.getBaseName()}_gromacs_output
     """
 }
+
 // Workflow definition
 workflow {
     download_molecules | separate_molecules | autodock_vina | gnina | gromacs
