@@ -1,3 +1,4 @@
+# This script separates molecules from PDBQT files by splitting them based on the MODEL tag
 import os
 
 def separate_molecules(input_files):
