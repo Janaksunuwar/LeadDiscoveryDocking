@@ -4,7 +4,7 @@ log.info """
     L E A D - D I S C O V E R Y  P I P E L I N E 
     ============================================
     Developed by: Janak Sunuwar, Ph.D,
-    UNIVERSITY OF NORTH TEXAS HEALTH SCIENCES CENTER
+    UNIVERSITY OF NORTH TEXAS HEALTH SCIENCES CENTER, Fort Worth, TX
     @2024
 
     """  
