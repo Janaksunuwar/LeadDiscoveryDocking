@@ -2,7 +2,6 @@ import os
 import subprocess
 import argparse
 
-
 def download_pdbqt_files(uri_file, output_dir):
     # Create the output directory if it doesn't exist
     os.makedirs(output_dir, exist_ok=True)
