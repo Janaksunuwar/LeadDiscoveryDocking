@@ -40,6 +40,8 @@ def main(input_files):
     # Separate molecules from each downloaded PDBQT file
     separate_molecules(input_files)
 
+    
+
 if __name__ == "__main__":
     import argparse
 

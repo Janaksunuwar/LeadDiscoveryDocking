@@ -18,7 +18,7 @@ def sdf_to_pdb(sdf_file, pdb_file):
     AllChem.UFFOptimizeMolecule(mol)
     
 
-    
+
     # Write the PDB file
     Chem.MolToPDBFile(mol, pdb_file)
     print(f"Converted {sdf_file} to {pdb_file}")
