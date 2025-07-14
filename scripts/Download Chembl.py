@@ -66,3 +66,8 @@ for i, mol in enumerate(selected):
     subprocess.run(["obabel", mol2_path, "-O", pdbqt_path])
 
 print("Done! All molecules converted to .pdbqt.")
+
+
+
+
+
