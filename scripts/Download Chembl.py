@@ -21,6 +21,9 @@ SDF_FILE = "chembl_35.sdf"
 SDF_GZ_FILE = SDF_FILE + ".gz"
 OUTPUT_DIR = "chembl_pdbqt"
 
+
+
+
 # Step 1: Setup
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 os.makedirs(f"{OUTPUT_DIR}/sdf", exist_ok=True)
