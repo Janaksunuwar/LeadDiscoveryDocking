@@ -22,8 +22,6 @@ SDF_GZ_FILE = SDF_FILE + ".gz"
 OUTPUT_DIR = "chembl_pdbqt"
 
 
-
-
 # Step 1: Setup
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 os.makedirs(f"{OUTPUT_DIR}/sdf", exist_ok=True)
@@ -68,4 +66,3 @@ for i, mol in enumerate(selected):
     subprocess.run(["obabel", mol2_path, "-O", pdbqt_path])
 
 print("Done! All molecules converted to .pdbqt.")
-
