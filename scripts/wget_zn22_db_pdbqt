@@ -1,0 +1,63 @@
+#this script will download the zinc database for the 22nd zinc subset 
+#the wget address was downloaded from the ZINC website ub AutoDock format (https://cartblanche22.docking.org/tranches/3d)
+
+#!/bin/python
+
+# This script downloads and organizes pdbqt files from ZINC22 database
+
+# This script downloads and organizes pdbqt files from ZINC22 database
+
+import os
+import subprocess
+import tarfile
+import shutil
+
+# Define the directory structure
+output_dir = "zn22_pdbqt_files"  # Directory to store extracted pdbqt files
+temp_dir = "temp_extraction"    # Temporary directory for extraction
+os.makedirs(output_dir, exist_ok=True)
+os.makedirs(temp_dir, exist_ok=True)
+
+# Read wget commands from the text file
+wget_file = 'ZINC22-downloader-3D-pdbqt.tgz.wget'  # Path to your text file with wget commands
+with open(wget_file, 'r') as file:
+    wget_commands = file.readlines()
+
+# Execute wget commands and extract pdbqt files
+for command in wget_commands:
+    command = command.strip()
+    if command.startswith("wget"):
+        print(f"Executing: {command}")
+        subprocess.run(command, shell=True)  # Run wget command
+
+        # Locate the downloaded .tgz file
+        tgz_file = command.split()[-1]  # Extract the file name from the wget command
+        tgz_file_path = None
+        for root, _, files in os.walk("."):  # Search for the .tgz file in the current directory and subdirectories
+            for file in files:
+                if file == os.path.basename(tgz_file):
+                    tgz_file_path = os.path.join(root, file)
+                    break
+            if tgz_file_path:
+                break
+
+        if tgz_file_path and os.path.exists(tgz_file_path):
+            print(f"Extracting: {tgz_file_path}")
+            with tarfile.open(tgz_file_path, 'r:gz') as tar:
+                tar.extractall(temp_dir)  # Extract to temporary directory
+            os.remove(tgz_file_path)  # Remove the .tgz file after extraction
+
+            # Move .pdbqt files to the output directory
+            for root, _, files in os.walk(temp_dir):
+                for file in files:
+                    if file.endswith(".pdbqt"):
+                        shutil.move(os.path.join(root, file), output_dir)
+
+            # Clean up temporary directory
+            for root, dirs, files in os.walk(temp_dir):
+                for file in files:
+                    os.remove(os.path.join(root, file))
+                for dir in dirs:
+                    os.rmdir(os.path.join(root, dir))
+
+print(f"All pdbqt files are stored in: {output_dir}")
