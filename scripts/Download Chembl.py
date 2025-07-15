@@ -47,6 +47,9 @@ mols = [m for m in suppl if m is not None]
 random.shuffle(mols)
 selected = mols[:NUM_MOLECULES]
 
+
+
+
 for i, mol in enumerate(selected):
     mol_name = f"mol_{i+1}"
     
