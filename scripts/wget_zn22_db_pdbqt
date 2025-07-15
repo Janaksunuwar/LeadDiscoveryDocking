@@ -5,10 +5,6 @@
 
 # This script downloads and organizes pdbqt files from ZINC22 database
 
-# This script downloads and organizes pdbqt files from ZINC22 database
-
-# This script downloads and organizes pdbqt files from ZINC22 database
-
 import os
 import subprocess
 import tarfile
@@ -17,8 +13,14 @@ import shutil
 # Define the directory structure
 output_dir = "zn22_pdbqt_files"  # Directory to store extracted pdbqt files
 temp_dir = "temp_extraction"    # Temporary directory for extraction
+summary_file = "download_summary.txt"  # File to store the summary of downloads
 os.makedirs(output_dir, exist_ok=True)
 os.makedirs(temp_dir, exist_ok=True)
+
+# Initialize counters
+total_tranches = 0
+total_pdbqt_files = 0
+total_duplicates = 0
 
 # Read wget commands from the text file
 wget_file = 'ZINC22-downloader-3D-pdbqt.tgz.wget'  # Path to your text file with wget commands
@@ -29,6 +31,7 @@ with open(wget_file, 'r') as file:
 for command in wget_commands:
     command = command.strip()
     if command.startswith("wget"):
+        total_tranches += 1  # Increment tranche counter
         print(f"Executing: {command}")
         subprocess.run(command, shell=True)  # Run wget command
 
@@ -53,10 +56,30 @@ for command in wget_commands:
             for root, _, files in os.walk(temp_dir):
                 for file in files:
                     if file.endswith(".pdbqt"):
-                        shutil.move(os.path.join(root, file), output_dir)
+                        total_pdbqt_files += 1  # Increment pdbqt file counter
+                        destination_path = os.path.join(output_dir, file)
+                        if os.path.exists(destination_path):
+                            total_duplicates += 1  # Increment duplicate counter
+                            print(f"Duplicate file detected: {file}. Skipping...")
+                        else:
+                            shutil.move(os.path.join(root, file), destination_path)
 
             # Clean up temporary directory
             shutil.rmtree(temp_dir)  # Remove the entire temp directory
             os.makedirs(temp_dir, exist_ok=True)  # Recreate the temp directory for the next iteration
 
-print(f"All pdbqt files are stored in: {output_dir}")
+# Write summary to a text file
+with open(summary_file, 'w') as summary:
+    summary.write(f"Summary of Downloads:\n")
+    summary.write(f"Total tranches processed: {total_tranches}\n")
+    summary.write(f"Total pdbqt files downloaded: {total_pdbqt_files}\n")
+    summary.write(f"Total duplicates skipped: {total_duplicates}\n")
+    summary.write(f"All unique pdbqt files are stored in: {output_dir}\n")
+
+# Print summary to console
+print(f"Summary:")
+print(f"Total tranches processed: {total_tranches}")
+print(f"Total pdbqt files downloaded: {total_pdbqt_files}")
+print(f"Total duplicates skipped: {total_duplicates}")
+print(f"All unique pdbqt files are stored in: {output_dir}")
+print(f"Summary written to: {summary_file}")
