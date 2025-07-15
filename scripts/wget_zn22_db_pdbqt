@@ -7,6 +7,8 @@
 
 # This script downloads and organizes pdbqt files from ZINC22 database
 
+# This script downloads and organizes pdbqt files from ZINC22 database
+
 import os
 import subprocess
 import tarfile
@@ -54,10 +56,7 @@ for command in wget_commands:
                         shutil.move(os.path.join(root, file), output_dir)
 
             # Clean up temporary directory
-            for root, dirs, files in os.walk(temp_dir):
-                for file in files:
-                    os.remove(os.path.join(root, file))
-                for dir in dirs:
-                    os.rmdir(os.path.join(root, dir))
+            shutil.rmtree(temp_dir)  # Remove the entire temp directory
+            os.makedirs(temp_dir, exist_ok=True)  # Recreate the temp directory for the next iteration
 
 print(f"All pdbqt files are stored in: {output_dir}")
