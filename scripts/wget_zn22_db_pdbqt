@@ -83,3 +83,6 @@ print(f"Total pdbqt files downloaded: {total_pdbqt_files}")
 print(f"Total duplicates skipped: {total_duplicates}")
 print(f"All unique pdbqt files are stored in: {output_dir}")
 print(f"Summary written to: {summary_file}")
+
+
+
