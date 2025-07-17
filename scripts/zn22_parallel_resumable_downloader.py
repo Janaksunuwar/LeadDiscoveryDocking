@@ -1,3 +1,5 @@
+#Zn db downloader from the wget 3D zinc22
+#This script downloads and extracts ZINC22 3D ligand files in parallel, resuming from where it left off.
 
 import os
 import subprocess
@@ -67,11 +69,17 @@ def process_job(index, shortname, command):
         finally:
             os.remove(local_tgz_path)
 
-        for item in os.listdir(temp_dir):
-            src = os.path.join(temp_dir, item)
-            dst = os.path.join(output_dir, item)
-            if not os.path.exists(dst):
-                os.rename(src, dst)
+        # Move extracted contents
+        for root, dirs, files in os.walk(temp_dir):
+            rel_path = os.path.relpath(root, temp_dir)
+            dest_path = os.path.join(output_dir, rel_path)
+            os.makedirs(dest_path, exist_ok=True)
+
+            for file in files:
+                src_file = os.path.join(root, file)
+                dst_file = os.path.join(dest_path, file)
+                if not os.path.exists(dst_file):  # avoid overwrite
+                    os.rename(src_file, dst_file)
 
     log_append(done_log_file, shortname)
     return f"[{index+1}] Done: {shortname}"
