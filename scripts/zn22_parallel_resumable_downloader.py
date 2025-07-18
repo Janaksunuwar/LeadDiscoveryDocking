@@ -11,7 +11,7 @@ from datetime import datetime
 # CONFIGURATION
 wget_file = 'ZINC22-downloader-3D-pdbqt.tgz.wget'  # Your wget command file
 output_dir = "zn_download"
-max_workers = 5
+max_workers = 2
 summary_file = "download_summary.txt"
 done_log_file = "downloaded.done"
 error_log_file = "failed.log"
