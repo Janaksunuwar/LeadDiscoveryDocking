@@ -121,6 +121,8 @@ duration = datetime.now() - start_time
 success_count = 0
 fail_count = 0
 
+
+
 if os.path.exists(done_log_file):
     with open(done_log_file, 'r') as f:
         success_count = len([line for line in f if line.strip()])
