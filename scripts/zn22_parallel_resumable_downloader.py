@@ -140,3 +140,7 @@ with open(summary_file, 'a') as f:
 
 log_timestamp_event(f"FINISHED download session. Duration: {duration}")
 print(f"All tasks completed. Duration: {duration}")
+
+
+
+
