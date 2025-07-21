@@ -1,5 +1,6 @@
 #Zn db downloader from the wget 3D zinc22
 #This script downloads and extracts ZINC22 3D ligand files in parallel, resuming from where it left off. Includes auto-pausing when volume is offline and retrying failed jobs.
+# The script might pause if the output directory is not mounted, and it will retry downloading files that failed previously.
 
 import os
 import subprocess
