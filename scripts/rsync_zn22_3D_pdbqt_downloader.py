@@ -4,6 +4,9 @@
 # Zn22 rsync parallel downloader for pdbqt files
 # Efficient alternative to wget-based download with resume and filtering support
 
+# Zn22 rsync parallel downloader for pdbqt files
+# Efficient alternative to wget-based download with resume and filtering support
+
 import os
 import subprocess
 import multiprocessing
@@ -24,6 +27,7 @@ rsync_log = "rsync_summary.log"
 os.makedirs(output_dir, exist_ok=True)
 
 # FUNCTION TO RUN RSYNC FOR A SINGLE TRANCHE
+
 def run_rsync(tranche):
     log_file = os.path.join(output_dir, f"rsync_{tranche}.log")
     target_dir = os.path.join(output_dir, tranche)
@@ -42,20 +46,25 @@ def run_rsync(tranche):
         target_dir
     ]
 
+    print(f"\n==============================\nStarting download for tranche: {tranche}\n==============================")
     start = datetime.now()
     with open(log_file, 'w') as log:
         log.write(f"Running: {' '.join(cmd)}\n")
         log.write(f"Started: {start}\n\n")
-        result = subprocess.run(cmd, stdout=log, stderr=log)
+        process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+        for line in process.stdout:
+            print(f"[{tranche}] {line.strip()}")  # Real-time stdout
+            log.write(line)
+        process.wait()
         end = datetime.now()
         log.write(f"\nFinished: {end}, Duration: {end - start}\n")
 
-    return tranche, result.returncode, start, end
+    return tranche, process.returncode, start, end
 
 # MAIN PARALLEL EXECUTION
 if __name__ == '__main__':
     start_time = datetime.now()
-    print(f"Starting rsync download of {len(tranches)} tranches at {start_time}")
+    print(f"\n=======================================\nStarting rsync download of {len(tranches)} tranches at {start_time}\n=======================================")
 
     with multiprocessing.Pool(processes=4) as pool:
         results = pool.map(run_rsync, tranches)
@@ -77,4 +86,4 @@ if __name__ == '__main__':
         for tranche, code, t_start, t_end in results:
             f.write(f"{tranche}: {'SUCCESS' if code == 0 else 'FAILED'} | Start: {t_start} | End: {t_end} | Duration: {t_end - t_start}\n")
 
-    print(f"All rsync tasks completed in {duration}")
+    print(f"\n=======================================\nAll rsync tasks completed in {duration}\n=======================================")
