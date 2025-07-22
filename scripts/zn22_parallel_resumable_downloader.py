@@ -3,6 +3,14 @@
 # The script might pause if the output directory is not mounted, and it will retry downloading files that failed previously.
 # It also logs the download status and timestamps for each event, allowing for easy tracking of progress and issues.
 
+# Modified downloader to ensure 'downloaded.done' is updated in real time
+# and clearly visible in the script flow.
+
+#Zn db downloader from the wget 3D zinc22
+#This script downloads and extracts ZINC22 3D ligand files in parallel, resuming from where it left off. Includes auto-pausing when volume is offline and retrying failed jobs.
+# The script might pause if the output directory is not mounted, and it will retry downloading files that failed previously.
+# It also logs the download status and timestamps for each event, allowing for easy tracking of progress and issues.
+
 import os
 import subprocess
 import tarfile
@@ -17,7 +25,7 @@ wget_file = 'ZINC22-downloader-3D-pdbqt.tgz.wget'
 output_dir = "zn_download"
 max_workers = 2
 summary_file = "download_summary.txt"
-done_log_file = "downloaded.log"
+done_log_file = "downloaded.done"
 error_log_file = "failed.log"
 notfound_log_file = "notfound.log"
 timestamp_log_file = "timestamp.log"
@@ -48,7 +56,8 @@ for line in wget_commands:
         continue
     url = parts[-1]
     shortname = os.path.basename(url)
-    if shortname not in done_files and shortname not in notfound_files:
+    dest_path = os.path.join(output_dir, url.replace("https://files.docking.org/", ""))
+    if shortname not in done_files and shortname not in notfound_files and not os.path.exists(dest_path.rstrip(".tgz")):
         jobs.append((shortname, line))
 
 total_jobs = len(jobs)
@@ -83,25 +92,12 @@ def process_job(index, shortname, command):
 
     log_timestamp_event(f"[{index+1}/{total_jobs}] Downloading {shortname}")
     local_tgz_path = os.path.join(output_dir, shortname)
-    result = subprocess.run(command, shell=True, cwd=output_dir, capture_output=True, text=True)
-
-    if result.returncode != 0:
-        if "401 Unauthorized" in result.stderr or "401 Unauthorized" in result.stdout:
-            log_append(notfound_log_file, shortname)
-            log_timestamp_event(f"UNAUTHORIZED (401): {shortname}")
-            return f"[{index+1}] 401 Unauthorized: {shortname}"
-        elif "404 Not Found" in result.stderr or "404 Not Found" in result.stdout:
-            log_append(notfound_log_file, shortname)
-            log_timestamp_event(f"NOT FOUND (404): {shortname}")
-            return f"[{index+1}] 404 Not Found: {shortname}"
-        log_append(error_log_file, shortname)
-        log_timestamp_event(f"FAILED: {shortname}")
-        return f"[{index+1}] Failed: {shortname}"
+    result = subprocess.run(command, shell=True, cwd=output_dir)
 
     if not os.path.exists(local_tgz_path):
         log_append(error_log_file, shortname)
         log_timestamp_event(f"FAILED (Missing file): {shortname}")
-        return f"[{index+1}] Missing file: {shortname}"
+        return f"[{index+1}] FAILED (Missing file): {shortname}"
 
     with tempfile.TemporaryDirectory() as temp_dir:
         try:
@@ -110,7 +106,7 @@ def process_job(index, shortname, command):
         except Exception as e:
             log_append(error_log_file, shortname)
             log_timestamp_event(f"EXTRACT FAIL: {shortname} ({e})")
-            return f"[{index+1}] Extract fail: {shortname} ({e})"
+            return f"[{index+1}] EXTRACT FAIL: {shortname} ({e})"
         finally:
             os.remove(local_tgz_path)
 
@@ -126,7 +122,7 @@ def process_job(index, shortname, command):
 
     log_append(done_log_file, shortname)
     log_timestamp_event(f"DOWNLOADED: {shortname}")
-    return f"[{index+1}] Done: {shortname}"
+    return f"[{index+1}] DONE: {shortname}"
 
 # MAIN PARALLEL LOOP
 start_time = datetime.now()
@@ -143,8 +139,7 @@ duration = datetime.now() - start_time
 new_success_count = 0
 if os.path.exists(done_log_file):
     with open(done_log_file, 'r') as f:
-        lines = [line for line in f if line.strip()]
-        new_success_count = len(set(lines) - done_files)
+        new_success_count = len([line for line in f if line.strip()])
 
 fail_count = 0
 if os.path.exists(error_log_file):
@@ -156,7 +151,7 @@ if os.path.exists(notfound_log_file):
     with open(notfound_log_file, 'r') as f:
         notfound_count = len([line for line in f if line.strip()])
 
-total_remaining = 822233 - len(done_files) - fail_count - notfound_count
+total_remaining = 822233 - new_success_count - fail_count - notfound_count
 
 with open(summary_file, 'a') as f:
     f.write(f"Run completed at: {datetime.now()}\n")
