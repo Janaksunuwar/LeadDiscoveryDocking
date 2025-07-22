@@ -17,7 +17,7 @@ wget_file = 'ZINC22-downloader-3D-pdbqt.tgz.wget'
 output_dir = "zn_download"
 max_workers = 2
 summary_file = "download_summary.txt"
-done_log_file = "downloaded.done"
+done_log_file = "downloaded.log"
 error_log_file = "failed.log"
 notfound_log_file = "notfound.log"
 timestamp_log_file = "timestamp.log"
@@ -64,6 +64,7 @@ def log_timestamp_event(event):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     with open(timestamp_log_file, 'a') as f:
         f.write(f"[{timestamp}] {event}\n")
+    print(f"[{timestamp}] {event}")
 
 # Mount check
 
@@ -80,12 +81,16 @@ def process_job(index, shortname, command):
         log_timestamp_event(f"PAUSED: Output dir {output_dir} is not mounted. Waiting...")
         time.sleep(polling_interval)
 
-    print(f"[{index+1}/{total_jobs}] Downloading {shortname}")
+    log_timestamp_event(f"[{index+1}/{total_jobs}] Downloading {shortname}")
     local_tgz_path = os.path.join(output_dir, shortname)
     result = subprocess.run(command, shell=True, cwd=output_dir, capture_output=True, text=True)
 
     if result.returncode != 0:
-        if "404 Not Found" in result.stderr or "404 Not Found" in result.stdout:
+        if "401 Unauthorized" in result.stderr or "401 Unauthorized" in result.stdout:
+            log_append(notfound_log_file, shortname)
+            log_timestamp_event(f"UNAUTHORIZED (401): {shortname}")
+            return f"[{index+1}] 401 Unauthorized: {shortname}"
+        elif "404 Not Found" in result.stderr or "404 Not Found" in result.stdout:
             log_append(notfound_log_file, shortname)
             log_timestamp_event(f"NOT FOUND (404): {shortname}")
             return f"[{index+1}] 404 Not Found: {shortname}"
@@ -134,30 +139,33 @@ with ThreadPoolExecutor(max_workers=max_workers) as executor:
 
 # FINAL SUMMARY
 duration = datetime.now() - start_time
-success_count = 0
-fail_count = 0
-notfound_count = 0
 
+new_success_count = 0
 if os.path.exists(done_log_file):
     with open(done_log_file, 'r') as f:
-        success_count = len([line for line in f if line.strip()])
+        lines = [line for line in f if line.strip()]
+        new_success_count = len(set(lines) - done_files)
 
+fail_count = 0
 if os.path.exists(error_log_file):
     with open(error_log_file, 'r') as f:
         fail_count = len([line for line in f if line.strip()])
 
+notfound_count = 0
 if os.path.exists(notfound_log_file):
     with open(notfound_log_file, 'r') as f:
         notfound_count = len([line for line in f if line.strip()])
 
+total_remaining = 822233 - len(done_files) - fail_count - notfound_count
+
 with open(summary_file, 'a') as f:
     f.write(f"Run completed at: {datetime.now()}\n")
     f.write(f"Total attempted this run: {total_jobs}\n")
-    f.write(f"Newly successful: {success_count}\n")
+    f.write(f"Newly successful: {new_success_count}\n")
     f.write(f"Newly failed: {fail_count}\n")
     f.write(f"404 Not Found: {notfound_count}\n")
     f.write(f"Duration: {duration}\n")
-    f.write(f"Total .tgz files remaining (unprocessed): {822233 - success_count - fail_count - notfound_count}\n\n")
+    f.write(f"Total .tgz files remaining (unprocessed): {total_remaining}\n\n")
 
 log_timestamp_event(f"FINISHED download session. Duration: {duration}")
 print(f"All tasks completed. Duration: {duration}")
