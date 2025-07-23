@@ -29,12 +29,11 @@ done_log_file = "downloaded.done"
 error_log_file = "failed.log"
 notfound_log_file = "notfound.log"
 timestamp_log_file = "timestamp.log"
-polling_interval = 60  # seconds to wait when volume is offline
+polling_interval = 60  # seconds
 
-# SETUP
 os.makedirs(output_dir, exist_ok=True)
 
-# Load already downloaded or skipped .tgz names (if any)
+# Load existing logs
 done_files = set()
 notfound_files = set()
 if os.path.exists(done_log_file):
@@ -44,11 +43,10 @@ if os.path.exists(notfound_log_file):
     with open(notfound_log_file, 'r') as f:
         notfound_files = set(line.strip() for line in f if line.strip())
 
-# Prepare wget commands
+# Parse wget commands
 with open(wget_file, 'r') as f:
     wget_commands = [line.strip() for line in f if line.strip().startswith("wget")]
 
-# Parse target filenames from commands
 jobs = []
 for line in wget_commands:
     parts = line.split()
@@ -56,8 +54,7 @@ for line in wget_commands:
         continue
     url = parts[-1]
     shortname = os.path.basename(url)
-    dest_path = os.path.join(output_dir, url.replace("https://files.docking.org/", ""))
-    if shortname not in done_files and shortname not in notfound_files and not os.path.exists(dest_path.rstrip(".tgz")):
+    if shortname not in done_files and shortname not in notfound_files:
         jobs.append((shortname, line))
 
 total_jobs = len(jobs)
@@ -75,29 +72,24 @@ def log_timestamp_event(event):
         f.write(f"[{timestamp}] {event}\n")
     print(f"[{timestamp}] {event}")
 
-# Mount check
-
 def is_output_mounted(path):
     partitions = [p.mountpoint for p in psutil.disk_partitions()]
     abs_path = os.path.abspath(path)
     return any(abs_path.startswith(p) for p in partitions)
 
-# Worker
-
 def process_job(index, shortname, command):
-    # Wait until volume is mounted
     while not is_output_mounted(output_dir):
         log_timestamp_event(f"PAUSED: Output dir {output_dir} is not mounted. Waiting...")
         time.sleep(polling_interval)
 
     log_timestamp_event(f"[{index+1}/{total_jobs}] Downloading {shortname}")
-    local_tgz_path = os.path.join(output_dir, shortname)
     result = subprocess.run(command, shell=True, cwd=output_dir)
 
+    local_tgz_path = os.path.join(output_dir, shortname)
     if not os.path.exists(local_tgz_path):
         log_append(error_log_file, shortname)
         log_timestamp_event(f"FAILED (Missing file): {shortname}")
-        return f"[{index+1}] FAILED (Missing file): {shortname}"
+        return f"[{index+1}] Failed: {shortname}"
 
     with tempfile.TemporaryDirectory() as temp_dir:
         try:
@@ -106,61 +98,37 @@ def process_job(index, shortname, command):
         except Exception as e:
             log_append(error_log_file, shortname)
             log_timestamp_event(f"EXTRACT FAIL: {shortname} ({e})")
-            return f"[{index+1}] EXTRACT FAIL: {shortname} ({e})"
+            return f"[{index+1}] Extract fail: {shortname} ({e})"
         finally:
             os.remove(local_tgz_path)
 
-        for root, dirs, files in os.walk(temp_dir):
+        for root, _, files in os.walk(temp_dir):
             rel_path = os.path.relpath(root, temp_dir)
             dest_path = os.path.join(output_dir, rel_path)
             os.makedirs(dest_path, exist_ok=True)
             for file in files:
-                src_file = os.path.join(root, file)
-                dst_file = os.path.join(dest_path, file)
-                if not os.path.exists(dst_file):
-                    os.rename(src_file, dst_file)
+                src = os.path.join(root, file)
+                dst = os.path.join(dest_path, file)
+                if not os.path.exists(dst):
+                    os.rename(src, dst)
 
     log_append(done_log_file, shortname)
     log_timestamp_event(f"DOWNLOADED: {shortname}")
-    return f"[{index+1}] DONE: {shortname}"
+    return f"[{index+1}] Done: {shortname}"
 
-# MAIN PARALLEL LOOP
+# MAIN LOOP
 start_time = datetime.now()
-log_timestamp_event(f"STARTED download session with {total_jobs} jobs")
+log_timestamp_event(f"STARTED session with {total_jobs} jobs")
 
 with ThreadPoolExecutor(max_workers=max_workers) as executor:
     futures = [executor.submit(process_job, i, name, cmd) for i, (name, cmd) in enumerate(jobs)]
     for future in as_completed(futures):
         print(future.result())
 
-# FINAL SUMMARY
 duration = datetime.now() - start_time
-
-new_success_count = 0
-if os.path.exists(done_log_file):
-    with open(done_log_file, 'r') as f:
-        new_success_count = len([line for line in f if line.strip()])
-
-fail_count = 0
-if os.path.exists(error_log_file):
-    with open(error_log_file, 'r') as f:
-        fail_count = len([line for line in f if line.strip()])
-
-notfound_count = 0
-if os.path.exists(notfound_log_file):
-    with open(notfound_log_file, 'r') as f:
-        notfound_count = len([line for line in f if line.strip()])
-
-total_remaining = 822233 - new_success_count - fail_count - notfound_count
-
 with open(summary_file, 'a') as f:
     f.write(f"Run completed at: {datetime.now()}\n")
-    f.write(f"Total attempted this run: {total_jobs}\n")
-    f.write(f"Newly successful: {new_success_count}\n")
-    f.write(f"Newly failed: {fail_count}\n")
-    f.write(f"404 Not Found: {notfound_count}\n")
-    f.write(f"Duration: {duration}\n")
-    f.write(f"Total .tgz files remaining (unprocessed): {total_remaining}\n\n")
+    f.write(f"Duration: {duration}\n\n")
 
-log_timestamp_event(f"FINISHED download session. Duration: {duration}")
-print(f"All tasks completed. Duration: {duration}")
+log_timestamp_event(f"FINISHED. Duration: {duration}")
+print(f"All done. Duration: {duration}")
