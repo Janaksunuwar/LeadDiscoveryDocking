@@ -13,16 +13,15 @@ mkdir -p "$DEST_DIR"
 mkdir -p "$LOG_DIR"
 
 # === START LOGGING ===
-echo "=== ZINC22 pdbqt Download Started: $(date) ===" | tee -a "$LOG_FILE"
+echo "=== ZINC22 pdbqt Sync Started: $(date) ===" | tee -a "$LOG_FILE"
 
 # === LOOP THROUGH zinc-22a to zinc-22z ===
 for PART in {a..z}; do
   PART_PATH="zinc-22$PART"
-  echo ">>> Downloading $PART_PATH..." | tee -a "$LOG_FILE"
+  echo ">>> Syncing $PART_PATH..." | tee -a "$LOG_FILE"
 
-  aws s3 cp \
+  aws s3 sync \
     --no-sign-request \
-    --recursive \
     --exclude "*" \
     --include "*.pdbqt.tgz" \
     "$S3_BUCKET/$PART_PATH/" "$DEST_DIR/$PART_PATH/" \
@@ -32,5 +31,4 @@ for PART in {a..z}; do
 done
 
 # === DONE ===
-echo "=== ZINC22 pdbqt Download Finished: $(date) ===" | tee -a "$LOG_FILE"
-
+echo "=== ZINC22 pdbqt Sync Finished: $(date) ===" | tee -a "$LOG_FILE"
