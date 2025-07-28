@@ -1,9 +1,5 @@
 ##Usingh rsync as weget keeps on breaking
 
-
-# Zn22 rsync parallel downloader for pdbqt files
-# Efficient alternative to wget-based download with resume and filtering support
-
 # Zn22 rsync parallel downloader for pdbqt files
 # Efficient alternative to wget-based download with resume and filtering support
 
