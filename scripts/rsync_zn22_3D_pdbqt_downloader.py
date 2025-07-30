@@ -8,9 +8,6 @@ import subprocess
 import multiprocessing
 from datetime import datetime
 
-
-
-
 # CONFIGURATION
 rsync_base = "rsync://files.docking.org/ZINC22-3D"
 tranches = [
