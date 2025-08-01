@@ -3,6 +3,8 @@
 # Zn22 rsync parallel downloader for pdbqt files
 # Efficient alternative to wget-based download with resume and filtering support
 
+
+
 import os
 import subprocess
 import multiprocessing
