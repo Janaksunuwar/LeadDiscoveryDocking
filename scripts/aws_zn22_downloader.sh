@@ -2,6 +2,10 @@
 
 #!/bin/bash
 
+
+
+
+
 # === CONFIGURATION ===
 S3_BUCKET="s3://zinc3d"
 DEST_DIR="zn22_pdbqt"
