@@ -35,7 +35,8 @@ def download_mien1():
 def convert_to_pdbqt():
     if not os.path.exists(RECEPTOR_PDBQT):
         print("Converting MIEN1 to PDBQT using prepare_receptor4.py...")
-        subprocess.run(["prepare_receptor4.py", "-r", RECEPTOR_PDB, "-o", RECEPTOR_PDBQT, "-A", "hydrogens"], check=True)
+        subprocess.run(["/opt/anaconda3/envs/mgltools/bin/python", "/opt/anaconda3/envs/mgltools/bin/prepare_receptor4.py", "-r", RECEPTOR_PDB, "-o", RECEPTOR_PDBQT, "-A", "hydrogens"], check=True)
+
     else:
         print("MIEN1 PDBQT already exists.")
 
