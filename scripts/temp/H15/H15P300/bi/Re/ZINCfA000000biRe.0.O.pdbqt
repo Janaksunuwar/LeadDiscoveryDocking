@@ -1,0 +1,33 @@
+REMARK  Name = ZINCfA000000biRe.0
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1  C   LIG    1        0.626  -1.961   1.241  0.00  0.00    +0.230 C 
+ATOM      2  C   LIG    1        1.549  -2.453   0.124  0.00  0.00    +0.110 C 
+ENDROOT
+BRANCH   1   3
+ATOM      3  C   LIG    1        1.131  -2.464   2.568  0.00  0.00    -0.130 A 
+ATOM      4  C   LIG    1        1.864  -1.628   3.390  0.00  0.00    +0.010 A 
+ATOM      5  C   LIG    1        2.327  -2.089   4.609  0.00  0.00    +0.070 A 
+ATOM      6  C   LIG    1        2.058  -3.386   5.005  0.00  0.00    -0.070 A 
+ATOM      7  C   LIG    1        1.325  -4.223   4.182  0.00  0.00    +0.070 A 
+ATOM      8 BR   LIG    1        2.692  -4.017   6.671  0.00  0.00    -0.020 Br
+ATOM      9  C   LIG    1        0.858  -3.760   2.967  0.00  0.00    -0.050 A 
+ATOM     10  C   LIG    1        0.054  -4.668   2.073  0.00  0.00    +0.110 C 
+ENDBRANCH   1   3
+BRANCH   1  11
+ATOM     11  N   LIG    1        0.606  -0.492   1.249  0.00  0.00    -0.510 N 
+ATOM     12  H   LIG    1        0.063  -0.168   2.035  0.00  0.00    +0.430 HD
+ATOM     13  H   LIG    1        1.550  -0.144   1.325  0.00  0.00    +0.430 HD
+BRANCH  11  14
+ATOM     14  C   LIG    1        0.002  -0.004   0.002  0.00  0.00    +0.280 C 
+BRANCH  14  15
+ATOM     15  C   LIG    1       -0.019   1.526   0.010  0.00  0.00    +0.210 C 
+BRANCH  15  17
+ATOM     16  C   LIG    1        1.415   3.446   0.007  0.00  0.00    +0.240 C 
+ATOM     17  O   LIG    1        1.322   2.020   0.000  0.00  0.00    -0.400 OA
+ENDBRANCH  15  17
+ENDBRANCH  14  15
+ENDBRANCH  11  14
+ENDBRANCH   1  11
+TORSDOF 5
