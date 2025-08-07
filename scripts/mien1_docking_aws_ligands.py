@@ -16,7 +16,7 @@ RECEPTOR_PDBQT = "MIEN1.pdbqt"
 RESULTS_DIR = "results"
 CSV_FILE = "docking_results.csv"
 TEMP_DIR = "temp"
-NUM_LIGANDS = 50
+NUM_LIGANDS = 50  # Target number, can be terminated manually
 ZINC_PREFIX = "zinc-22"
 
 # === PREP ===
@@ -36,29 +36,10 @@ def convert_to_pdbqt():
     if not os.path.exists(RECEPTOR_PDBQT):
         print("Converting MIEN1 to PDBQT using prepare_receptor4.py...")
         subprocess.run(["/opt/anaconda3/envs/mgltools/bin/python", "/opt/anaconda3/envs/mgltools/bin/prepare_receptor4.py", "-r", RECEPTOR_PDB, "-o", RECEPTOR_PDBQT, "-A", "hydrogens"], check=True)
-
     else:
         print("MIEN1 PDBQT already exists.")
 
-# === Step 3: Sample Ligands from AWS ===
-def list_random_ligands(n):
-    print(f"Fetching ligand list from zinc3d bucket...")
-    s3 = boto3.client('s3', config=Config(signature_version=UNSIGNED))
-    paginator = s3.get_paginator('list_objects_v2')
-
-    all_keys = []
-    for tranche in 'abcdefghijklmnopqrstuvwxyz':
-        prefix = f"{ZINC_PREFIX}{tranche}/"
-        pages = paginator.paginate(Bucket="zinc3d", Prefix=prefix)
-        for page in pages:
-            for obj in page.get('Contents', []):
-                if obj['Key'].endswith(".pdbqt.tgz"):
-                    all_keys.append(obj['Key'])
-
-    print(f"Total ligands found: {len(all_keys)}")
-    return random.sample(all_keys, min(n, len(all_keys)))
-
-# === Step 4: Docking Each Ligand ===
+# === Step 3: Docking Each Ligand ===
 def dock_ligand(s3_key):
     local_tgz = os.path.join(TEMP_DIR, os.path.basename(s3_key))
     local_pdbqt = local_tgz.replace(".tgz", "")
@@ -95,7 +76,7 @@ def dock_ligand(s3_key):
 
     return s3_key, out_pdbqt, best_score
 
-# === Step 5: Log to CSV ===
+# === Step 4: Log to CSV ===
 def append_to_csv(rows):
     header = ["aws_key", "local_result", "binding_score"]
     write_header = not os.path.exists(CSV_FILE)
@@ -108,16 +89,34 @@ def append_to_csv(rows):
 # === RUN ===
 download_mien1()
 convert_to_pdbqt()
-ligands = list_random_ligands(NUM_LIGANDS)
+
+print("\nStarting ligand docking loop... Press Ctrl+C anytime to stop.\n")
+
+s3 = boto3.client('s3', config=Config(signature_version=UNSIGNED))
+paginator = s3.get_paginator('list_objects_v2')
 results = []
+docked = 0
 
-for ligand_key in ligands:
-    try:
-        print(f"Docking: {ligand_key}")
-        row = dock_ligand(ligand_key)
-        results.append(row)
-    except Exception as e:
-        print(f"Failed on {ligand_key}: {e}")
+try:
+    for tranche in 'abcdefghijklmnopqrstuvwxyz':
+        prefix = f"{ZINC_PREFIX}{tranche}/"
+        pages = paginator.paginate(Bucket="zinc3d", Prefix=prefix)
+        for page in pages:
+            for obj in page.get('Contents', []):
+                key = obj['Key']
+                if not key.endswith(".pdbqt.tgz"):
+                    continue
+                try:
+                    print(f"\nDocking ligand #{docked + 1}: {key}")
+                    row = dock_ligand(key)
+                    results.append(row)
+                    append_to_csv([row])
+                    docked += 1
+                    print(f"Docked {docked} ligands so far.")
+                except Exception as e:
+                    print(f"Failed on {key}: {e}")
+except KeyboardInterrupt:
+    print("\nDocking interrupted manually.")
 
-append_to_csv(results)
-print("Docking complete. Results saved in docking_results.csv")
+print(f"\nDocking complete. Total ligands docked: {docked}")
+print(f"Results saved in {CSV_FILE}\n")

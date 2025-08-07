@@ -1,0 +1,24 @@
+REMARK  Name = ZINC650000002oCg.0
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1  CA  LIG    1        1.145   3.085   0.008  0.00  0.00    +0.180 C 
+ENDROOT
+BRANCH   1   2
+ATOM      2  N   LIG    1        0.505   3.525  -1.239  0.00  0.00    -0.630 N 
+ATOM      3  H1  LIG    1        1.072   3.245  -2.025  0.00  0.00    +0.430 HD
+ATOM      4  H2  LIG    1        0.411   4.530  -1.233  0.00  0.00    +0.430 HD
+ATOM      5  H3  LIG    1       -0.408   3.103  -1.316  0.00  0.00    +0.440 HD
+ENDBRANCH   1   2
+BRANCH   1   7
+ATOM      6  C   LIG    1        2.381   5.242   0.259  0.00  0.00    +0.040 C 
+ATOM      7  C   LIG    1        2.530   3.725   0.124  0.00  0.00    +0.050 C 
+ENDBRANCH   1   7
+BRANCH   1   8
+ATOM      8  C   LIG    1        1.286   1.562  -0.002  0.00  0.00    +0.220 C 
+BRANCH   8   9
+ATOM      9  O   LIG    1       -0.011   0.963   0.007  0.00  0.00    -0.580 OA
+ATOM     10  H   LIG    1        0.002  -0.004   0.002  0.00  0.00    +0.410 HD
+ENDBRANCH   8   9
+ENDBRANCH   1   8
+TORSDOF 4

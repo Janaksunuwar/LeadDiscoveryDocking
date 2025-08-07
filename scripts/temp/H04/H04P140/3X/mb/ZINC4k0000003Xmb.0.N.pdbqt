@@ -1,0 +1,12 @@
+REMARK  Name = ZINC4k0000003Xmb.0
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 CL   LIG    1        0.002  -0.004   0.002  0.00  0.00    -0.160 Cl
+ATOM      2  C   LIG    1       -0.022   1.799   0.012  0.00  0.00    +0.170 C 
+ENDROOT
+BRANCH   2   3
+ATOM      3  C   LIG    1       -0.739   2.292   1.271  0.00  0.00    +0.170 C 
+ATOM      4 CL   LIG    1       -0.763   4.095   1.281  0.00  0.00    -0.160 Cl
+ENDBRANCH   2   3
+TORSDOF 1

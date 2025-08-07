@@ -1,0 +1,10 @@
+REMARK  Name = ZINC4u0000000ARF.0
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 BR   LIG    1        0.002  -0.004   0.002  0.00  0.00    -0.040 Br
+ATOM      2  C   LIG    1       -0.025   1.962   0.013  0.00  0.00    +0.130 C 
+ATOM      3 BR   LIG    1       -0.976   2.613  -1.580  0.00  0.00    -0.040 Br
+ATOM      4 BR   LIG    1        1.820   2.642  -0.001  0.00  0.00    -0.040 Br
+ENDROOT
+TORSDOF 0

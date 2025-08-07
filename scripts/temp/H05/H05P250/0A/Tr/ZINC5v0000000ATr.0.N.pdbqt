@@ -1,0 +1,11 @@
+REMARK  Name = ZINC5v0000000ATr.0
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 CL   LIG    1        0.002  -0.004   0.002  0.00  0.00    -0.040 Cl
+ATOM      2  C   LIG    1       -0.021   1.732   0.012  0.00  0.00    +0.100 C 
+ATOM      3  C   LIG    1       -1.169   2.373   0.021  0.00  0.00    -0.040 C 
+ATOM      4 CL   LIG    1       -1.192   4.109   0.030  0.00  0.00    -0.010 Cl
+ATOM      5 CL   LIG    1       -2.660   1.485   0.023  0.00  0.00    -0.020 Cl
+ENDROOT
+TORSDOF 0

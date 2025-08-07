@@ -1,0 +1,19 @@
+REMARK  Name = ZINC650000002rCx.0
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1  CB  ALA A  1       -0.729   1.579   1.267  0.00  0.00    +0.080 C 
+ATOM      2  CA  ALA A  1       -0.013   1.086   0.008  0.00  0.00    +0.070 C 
+ENDROOT
+BRANCH   2   3
+ATOM      3  N   ALA A  1       -0.723   1.572  -1.182  0.00  0.00    -0.610 N 
+ATOM      4  H1  ALA A  1       -0.737   2.581  -1.177  0.00  0.00    +0.430 HD
+ATOM      5  H2  ALA A  1       -1.670   1.223  -1.175  0.00  0.00    +0.410 HD
+ATOM      6  H3  ALA A  1       -0.251   1.247  -2.012  0.00  0.00    +0.430 HD
+ENDBRANCH   2   3
+BRANCH   2   7
+ATOM      7  C   ALA A  1        1.401   1.607  -0.003  0.00  0.00    +0.490 C 
+ATOM      8  OXT ALA A  1        2.216   1.177   0.796  0.00  0.00    -0.640 OA
+ATOM      9  O   ALA A  1        1.730   2.459  -0.810  0.00  0.00    -0.670 OA
+ENDBRANCH   2   7
+TORSDOF 2
